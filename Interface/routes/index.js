@@ -136,7 +136,7 @@ router.get('/tribunal', function(req, res, next) {
       }
     })
     .catch(error => {
-      res.render('error', {err: error})
+      res.render('error', {err: error, message: 'ERROR'})
     })
 });
 
@@ -152,7 +152,7 @@ router.post('/processo/editar/:id', function(req, res, next) {
               res.render('acordao-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, a: resposta.data })
             })
             .catch(error => {
-              res.render('error', {err: error})
+              res.render('error', {err: error, message: 'ERROR'})
             })
         }
         else {
@@ -184,7 +184,7 @@ router.get('/processo/:id', function(req, res, next) {
       }
     })
     .catch(error => {
-      res.render('error', {err: error})
+      res.render('error', {err: error, message: 'ERROR'})
     })
 });
 
@@ -199,7 +199,7 @@ router.get('/perfil', function(req, res, next) {
         res.render('profile', {profile: response.data, active: true })
       })
       .catch(e => {
-        res.render('error', {error: e})
+        res.render('error', {err: error, message: 'ERROR'})
       })
   }
   else{
@@ -255,7 +255,7 @@ router.get('/logout', function(req, res){
     res.redirect('/');
   })
   .catch(e =>{
-    res.render('error', {error: e})
+    res.render('error', {err: error, message: 'ERROR'})
   })
 })
 

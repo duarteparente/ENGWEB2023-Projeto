@@ -41,7 +41,9 @@ html
                                     h3= username
                                     ul 
                                         li.p: a(href="/perfil") Perfil
-                                        li.f: a(href="/") Favoritos 
+                                        li.f: a(href="/") Favoritos
+                                        if adm == true 
+                                            li.a: a(href="/") Novo acórdão
                                         li.l: a(href="/logout") Logout
 
                         else

@@ -1,6 +1,11 @@
 const mongoose = require('mongoose')
 var passportLocalMongoose = require('passport-local-mongoose');
 
+var favSchema = new mongoose.Schema({
+  Processo: String,
+  Descricao: String
+})
+
 var userSchema = new mongoose.Schema({
     username: String,
     name: String,
@@ -11,7 +16,8 @@ var userSchema = new mongoose.Schema({
     active: Boolean,
     dateCreated: String,
     lastAccess: String,
-    localidade: String
+    localidade: String,
+    favs: [favSchema]
   });
 
 userSchema.plugin(passportLocalMongoose);
