@@ -43,7 +43,7 @@ html
                                         li.p: a(href="/perfil") Perfil
                                         li.f: a(href="/") Favoritos
                                         if adm == true 
-                                            li.a: a(href="/") Novo acórdão
+                                            li.a: a(href="/adicionar") Novo acórdão
                                         li.l: a(href="/logout") Logout
 
                         else
@@ -96,7 +96,7 @@ html
                 table 
                     each key in Object.keys(a)
                         tr
-                            if key != '_id' && key != 'Processo'
+                            if key != '_id' && key != 'Processo' && key != 'Descritores'
                                 if key in d
                                     td.key= d[key]
                                 else
@@ -104,10 +104,8 @@ html
                                     td.key= key
                                 td.inp
                                     .input-container
-                                        if key == 'Descritores'
-                                            input(name="messi" type="text" readonly value=a[key])
-                                        else 
-                                           input(name=key type="text" value=a[key])
+                                        if key != 'Descritores'
+                                            input(name=key type="text" value=a[key])
 
                 img.popup-image(src='/images/close.png', alt='close', onclick=`toggle(); resetInputs()`)
                 button(type='submit') Guardar alterações

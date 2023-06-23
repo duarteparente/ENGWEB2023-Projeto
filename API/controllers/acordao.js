@@ -82,10 +82,26 @@ module.exports.getSearchAcordaosTribunal = (tribunal, Descritor, DataAcordao) =>
 
 module.exports.updateAcordao = (id, a) => {
     return Acordao.updateOne({ _id: id }, a)
-      .then(() => {
-        return Acordao.findOne({_id: id});
-      })
-      .catch(erro => {
-        throw erro;
-      })
+        .then(() => {
+            return Acordao.findOne({_id: id})
+        })
+        .catch(erro => {
+            return erro
+        })
 }
+
+
+module.exports.createAcordao = a => {
+    return Acordao.findOne({ Processo: a.Processo })
+        .then(proc => {
+            if (proc) {
+                return {};
+            } 
+            else {
+                return Acordao.create(a)
+            }
+        })
+        .catch(erro => {
+            return erro;
+        });
+};

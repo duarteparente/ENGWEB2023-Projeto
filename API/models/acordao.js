@@ -104,6 +104,9 @@ var tSchema = new mongoose.Schema({
     Estrangeiro1: String,
     Reclamacoes: String,
     DataDecRecorrida: String
+},
+{
+versionKey: false
 });
 
 module.exports = mongoose.model('acordao', tSchema)

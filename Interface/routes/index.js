@@ -3,12 +3,21 @@ var router = express.Router();
 var axios = require('axios')
 var user, admin
 var dict = {
+  Processo: "Processo",
+  url: "url",
+  tribunal: "tribunal",
+  Descritores: "Descritores",
+  Relator: "Relator",
+  Privacidade: "Privacidade",
   Votacao: "Votação",
   NConvencional: "Número Convencional",
+  Data: "Data",
   DataAcordao: "Data do Acórdão",
   Acordao: "Acordão",
   NDocumento: "Número do Documento",
   Especie: "Espécie",
+  Requerente: "Requerente",
+  Requerido: "Requerido",
   NormasApreciadas: "Normas Apreciadas",
   NormasJulgadasInconst: "Normas Julgadas Inconstitucionais",
   AreaTematica1: "Área Temática 1",
@@ -40,10 +49,13 @@ var dict = {
   JurisprudenciaInternacional: "Jurisprudência Internacional",
   JurisprudenciaEstrangeira: "Jurisprudência Estrangeira",
   LegislacaoEstrangeira: "Legislação Estrangeira",
+  Tribunal: "Tribunal",
+  Recorrente: "Recorrente",
   Recorrido1: "Recorrido 1",
   Recorrido2: "Recorrido 2",
   DataEntrada: "Data de Entrada",
   MeioProcessual: "Meio Processual",
+  Objecto: "Objecto",
   ReferenciaDoutrina: "Referência a Doutrina",
   JurisprudenciaNacional: "Jurisprudência Nacional",
   NVolume: "Número do Volume",
@@ -57,27 +69,35 @@ var dict = {
   JuizoSeccao: "Juízo ou Secção",
   TipoAcao: "Tipo de Ação",
   TipoContrato: "Tipo de Contrato",
+  Autor: "Autor",
   Reu: "Réu",
   DataDecisao: "Data da Decisão",
   TextoClausulasAbusivas: "Texto das Cláusulas Abusivas",
+  Recursos: "Recursos",
   Pagina: "Página",
   ReferenciaPublicacao2: "Referência de Publicação 2",
   DecisaoTextoIntegral: "Decisão Texto Integral",
+  Apenso: "Apenso",
   ReferenciaPublicacao: "Referência de Publicação",
   DataDecisaoSumaria: "Data da Decisão Sumária",
   NUnicoProcesso: "Número Único do Processo",
   TribunalRecurso: "Tribunal Recurso",
+  Doutrina: "Doutrina",
   AreaTematica: "Área Temática",
   DataDecisaoSingular: "Data da Decisão Singular",
   DataReclamacao: "Data da Reclamação",
   ReferenciaProcesso: "Referência do Processo",
   ProcessoTribunalRecurso: "Processo no Tribunal Recurso",
+  Recurso: "Recurso",
   Seccao: "Secção",
+  Contencioso: "Contencioso",
   NProcessoTAF: "Número do Processo/TAF",
   SubSeccao: "Sub-Secção",
+  Magistrado: "Magistrado",
   Observacoes: "Observações",
   DisponivelJTCA: "Disponível na JTCA",
   PecaProcessual: "Peça Processual",
+  Tema: "Tema",
   ParecerMinisterioPublico: "Parecer do Ministério Publico",
   TribunalRecorrido: "Tribunal Recorrido",
   ProcessoTribunalRecorrido: "Processo no Tribunal Recorrido",
@@ -146,7 +166,6 @@ router.post('/processo/editar/:id', function(req, res, next) {
       if(token && user){
         (user.level == 'admin') ? admin = true : admin = false
         if (admin == true) {
-          console.log(req.body)
           axios.put('http://localhost:22231/acordaos/editar/' + req.params.id, req.body)
             .then(resposta => {
               res.render('acordao-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, a: resposta.data })
@@ -193,7 +212,6 @@ router.get('/perfil', function(req, res, next) {
   var token = req.cookies.token;
   if(token && user){
     (user.level == 'admin') ? admin = true : admin = false
-    console.log(token)
     axios.post("http://localhost:22230/users/" + user.username + "/perfil", {tkn: token})
       .then(response => {
         res.render('profile', {profile: response.data, active: true })
@@ -205,6 +223,53 @@ router.get('/perfil', function(req, res, next) {
   else{
     res.render('loginForm', {message: 'OK'})
   }
+});
+
+
+router.get('/adicionar', function(req, res, next) {
+  var token = req.cookies.token;
+  if(token && user){
+    (user.level == 'admin') ? admin = true : admin = false
+    if (admin == true){
+      res.render('addAc-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, msg: 'OK'})
+    }
+    else {
+      res.render('loginForm', {message: 'OK'})
+    }
+  }
+  else{
+    res.render('loginForm', {message: 'OK'})
+  }
+});
+
+
+router.post('/adicionar', function(req, res, next) {
+  var token = req.cookies.token;
+      if(token && user){
+        (user.level == 'admin') ? admin = true : admin = false
+        if (admin == true) {
+          const filtered = Object.fromEntries(Object.entries(req.body).filter(([key, value]) => value !== ''));
+          if ("Descritores" in filtered)
+            filtered["Descritores"] = filtered["Descritores"].split(",")
+          
+          axios.post('http://localhost:22231/acordaos', filtered)
+            .then(resposta => {
+              if (Object.keys(resposta.data).length == 0)
+              res.render('addAc-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, msg: 'NO'})
+              else
+                res.render('acordao-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, a: resposta.data })
+            })
+            .catch(error => {
+              res.render('error', {err: error, message: 'ERROR'})
+            })
+        }
+        else {
+          res.render('main-page', {log: true, adm: admin, username: user.username, lvl: user.level })
+        }      
+      }
+      else{
+        res.render('loginForm', {message: 'OK'})
+      }
 });
 
 

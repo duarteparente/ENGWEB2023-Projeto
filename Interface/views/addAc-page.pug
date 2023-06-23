@@ -1,7 +1,7 @@
 html 
     head 
         title AcordWEB 
-        link(rel="stylesheet" href="/stylesheets/tribunal-page.css")
+        link(rel="stylesheet" href="/stylesheets/addAc-page.css")
     body
         script. 
             function dropDownToggle() {
@@ -30,21 +30,29 @@ html
                         else
                             li: a(href="/login") Login/Registar
             
-            .content         
-                .title 
-                    h1 #{ft} [#{acs.length} registos encontrados]
-                .box
-                    .table-wrapper
-                        table 
-                            tr 
-                                th Processo 
-                                th url 
-                            each ac in acs 
-                                tr 
-                                    td 
-                                        a(href="/processo/" + ac.Processo.replace("/","%2F"))= ac.Processo
-                                    td 
-                                        a(href="http://www.dgsi.pt" + ac.url target='_blank')= ac.url
+            .content
+                form(action=`/adicionar` method="POST")        
+                    .title 
+                        h1 Novo Acórdão
+                    if msg == 'NO'
+                        p.err O processo já se encontra na base de dados!
+
+                    .box
+                            .table-wrapper
+                                table 
+                                    tr 
+                                        th Atributos 
+                                        th Campos de preenchimento 
+                                    each key in Object.keys(d)  
+                                        tr 
+                                            td.key= d[key]
+                                            td
+                                                if key == "Processo"
+                                                    input(name=key type="text" required)
+                                                else 
+                                                    input(name=key type="text")
+
+                    button.cr(type='submit') Adicionar
 
             .footer
                 p #[strong AcordWEB] é um site desenvolvido com o objetivo de facilitar o processo de consulta/manipulação de acórdãos jurídicos

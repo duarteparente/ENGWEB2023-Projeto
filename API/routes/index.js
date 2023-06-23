@@ -41,4 +41,11 @@ router.put('/acordaos/editar/:id', function(req, res) {
 });
 
 
+router.post('/acordaos', function(req,res) {
+  Acordao.createAcordao(req.body)
+    .then(dados => res.status(200).json(dados))
+    .catch(erro => res.status(520).json({erro: erro, mensagem: "Não consegui adicionar um novo acórdão!"}))
+})
+
+
 module.exports = router;
