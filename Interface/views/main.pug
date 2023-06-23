@@ -1,0 +1,83 @@
+extends layout
+
+block content
+  script.
+    function handleButtonClick() {
+      var inputValue = document.getElementById('search-input').value.replace("/","%2F");
+      window.location.href = '/' + inputValue;
+    }
+
+  nav.navbar
+    .logo #[strong Bases Jurídicas]
+    ul.nav-links
+      .menu
+        li: a(href="/") Login
+        li: a(href="/") Registar
+
+
+  .content
+    .split.left
+      img(src="/images/justica-tribunal.jpg", alt="Image Description")
+    .split.right
+      table.first
+        tr
+          th.table-header Bases de Dados
+        tr
+          td.table-cell
+            a(href="/tribunais/atco1") Acórdãos do Tribunal Constitucional [atco1]
+        tr
+          td.table-cell
+            a(href="/tribunais/jcon") Acórdãos do Tribunal dos Conflitos [jcon]
+        tr
+          td.table-cell
+            a(href="/tribunais/jdgpj") Cláusulas Abusivas julgadas pelos Tribunais [jdgpj]
+        tr
+          td.table-cell
+            a(href="/tribunais/jsta") Acórdãos do Supremo Tribunal Administrativo [jsta]
+        tr
+          td.table-cell
+            a(href="/tribunais/jstj") Acórdãos do Supremo Tribunal de Justiça [jstj]
+        tr
+          td.table-cell
+            a(href="/tribunais/jtca") Acórdãos do Tribunal Central Administrativo Sul [jtca]
+        tr
+          td.table-cell
+            a(href="/tribunais/jtcampca") Pareceres do MP do Tribunal Central Administrativo Sul - Contencioso Administrativo [jtcampca]
+        tr
+          td.table-cell
+            a(href="/tribunais/jtcampct") Pareceres do MP do Tribunal Central Administrativo Sul - Contencioso Tributário [jtcampct]
+        tr
+          td.table-cell
+            a(href="/tribunais/jtcn") Acórdãos do Tribunal Central Administrativo Norte [jtcn]
+        tr
+          td.table-cell
+            a(href="/tribunais/jtrc") Acórdãos do Tribunal da Relação de Coimbra [jtrc]
+        tr
+          td.table-cell
+            a(href="/tribunais/jtre") Acórdãos do Tribunal da Relação de Évora [jtre]
+        tr
+          td.table-cell
+            a(href="/tribunais/jtrg") Acórdãos do Tribunal da Relação de Guimarães [jtrg]
+        tr
+          td.table-cell
+            a(href="/tribunais/jtrl") Acórdãos do Tribunal da Relação de Lisboa [jtrl]
+        tr
+          td.table-cell
+            a(href="/tribunais/jtrp") Acórdãos do Tribunal da Relação do Porto [jtrp]
+      table.second
+        tr
+          th.table-header Pesquisa por Processo
+        tr
+          td
+            .search 
+              input(id="search-input" type="text" placeholder=" Processo...")
+              button(type="submit" onclick="handleButtonClick()") Procurar
+     
+
+  .footer
+    p #[strong AcordWEB] é um site desenvolvido com o objetivo de facilitar o processo de consulta/manipulação de acórdãos jurídicos
+    p &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+    p &copy; 2023 Engenharia Web&emsp;@&emsp;
+    a(href="https://www.linkedin.com/in/duarte-parente-980375264/" target="_blank") Duarte Parente
+    p &emsp;|&emsp;
+    a(href="https://www.linkedin.com/in/jos%C3%A9-moreira-a50884241/" target="_blank") José Moreira

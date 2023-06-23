@@ -1,0 +1,41 @@
+extends aclayout
+
+block content
+  nav.navbar
+    .logo #[strong Bases Jurídicas]
+    ul.nav-links
+      .menu
+        li: a(href="/") Login
+        li: a(href="/") Registar
+
+  .content 
+    .w3-card-4.trib
+      header.w3-container
+        h1 #{ft}
+        .menu
+          li: a(href="javascript:void(0)", onclick="goBack()") Voltar
+          script.
+            function goBack() {
+              window.history.go(-1);
+            }
+          li: a(href="/") Menu Principal
+      .w3-container
+        table.w3-table-all.trib
+          tr
+            th Processo 
+            th url
+
+          each a in acs 
+            tr
+              td
+                a(href="/processo/" + a.Processo.replace("/","%2F"))= a.Processo
+              td= a.url
+      
+
+  .footer
+    p #[strong AcordWEB] é um site desenvolvido com o objetivo de facilitar o processo de consulta/manipulação de acórdãos jurídicos
+    p &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+    p &copy; 2023 Engenharia Web&emsp;@&emsp;
+    a(href="https://www.linkedin.com/in/duarte-parente-980375264/" target="_blank") Duarte Parente
+    p &emsp;|&emsp;
+    a(href="https://www.linkedin.com/in/jos%C3%A9-moreira-a50884241/" target="_blank") José Moreira

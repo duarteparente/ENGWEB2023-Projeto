@@ -1,0 +1,53 @@
+html 
+    head 
+        title AcordWEB 
+        link(rel="stylesheet" href="/stylesheets/tribunal-page.css")
+    body
+        script. 
+            function dropDownToggle() {
+                var toggle = document.querySelector('.dropdown');
+                toggle.classList.toggle('active');
+            }
+        .container
+            nav.navbar
+                a(href="/")
+                    img(src="/images/logo.png" class="logo")
+                ul.nav-links
+                    .menu
+                        if log
+                            .action 
+                                .profile 
+                                    img(src="/images/justice.jpeg" onclick="dropDownToggle();")
+                                .dropdown
+                                    h3= username
+                                    ul 
+                                        li.p: a(href="/perfil") Perfil
+                                        li.f: a(href="/") Favoritos 
+                                        li.l: a(href="/logout") Logout
+
+                        else
+                            li: a(href="/login") Login/Registar
+            
+            .content         
+                .title 
+                    h1 #{ft} [#{acs.length} registos encontrados]
+                .box
+                    .table-wrapper
+                        table 
+                            tr 
+                                th Processo 
+                                th url 
+                            each ac in acs 
+                                tr 
+                                    td 
+                                        a(href="/processo/" + ac.Processo.replace("/","%2F"))= ac.Processo
+                                    td 
+                                        a(href="http://www.dgsi.pt" + ac.url target='_blank')= ac.url
+
+            .footer
+                p #[strong AcordWEB] é um site desenvolvido com o objetivo de facilitar o processo de consulta/manipulação de acórdãos jurídicos
+                p &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                p &copy; 2023 Engenharia Web&emsp;@&emsp;
+                a(href="https://www.linkedin.com/in/duarte-parente-980375264/" target="_blank") Duarte Parente
+                p &emsp;|&emsp;
+                a(href="https://www.linkedin.com/in/jos%C3%A9-moreira-a50884241/" target="_blank") José Moreira

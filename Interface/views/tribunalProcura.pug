@@ -1,0 +1,36 @@
+extends layout
+
+block content
+  script.
+    function handleButtonClick() {
+      var inputValue1 = document.getElementById('search-input1').value;
+      var inputValue2 = document.getElementById('search-input2').value;
+      var inputValue3 = document.getElementById('search-input3').value.replaceAll("/","%2F");
+      window.location.href = '/tribunal?tribunal=' + inputValue1 + '&Descritor=' + inputValue2 + '&DataAcordao=' + inputValue3;
+    }
+  nav.navbar
+    .logo #[strong Bases Jurídicas]
+    ul.nav-links
+      .menu
+        li: a(href="/") Login
+        li: a(href="/") Registar
+
+  .content 
+    .w3-card-4.trib
+      header.w3-container
+        h1 #{ft}
+        .menu
+          li: a(href="/") Voltar
+      .search.trib
+        li: input(id="search-input1" type="text" value="" + t readonly)
+        li: input(id="search-input2" type="text" placeholder="Descritor")
+        li: input(id="search-input3" type="text" placeholder="Data do Acórdão [mm/dd/aaaa]")
+        li: button(type="submit" onclick="handleButtonClick()") Procurar
+
+  .footer
+    p #[strong AcordWEB] é um site desenvolvido com o objetivo de facilitar o processo de consulta/manipulação de acórdãos jurídicos
+    p &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+    p &copy; 2023 Engenharia Web&emsp;@&emsp;
+    a(href="https://www.linkedin.com/in/duarte-parente-980375264/" target="_blank") Duarte Parente
+    p &emsp;|&emsp;
+    a(href="https://www.linkedin.com/in/jos%C3%A9-moreira-a50884241/" target="_blank") José Moreira

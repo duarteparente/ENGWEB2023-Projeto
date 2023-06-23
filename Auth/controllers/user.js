@@ -1,0 +1,102 @@
+// Controlador para o modelo User
+
+var User = require('../models/user')
+
+// Lista de Users
+module.exports.list = () => {
+    return User
+            .find()
+            .sort('name')
+            .then(resposta => {
+                return resposta
+            })
+            .catch(erro => {
+                return erro
+            })
+}
+
+
+// User Logout
+module.exports.userLogout = usr => {
+    return User.updateOne({username: usr}, {active: false})
+            .then(resposta => {
+                return resposta
+            })
+            .catch(erro => {
+                return erro
+            })
+}
+
+// User Login
+module.exports.userLogin = (usr, date) => {
+    return User.updateOne({username: usr}, {active: true, lastAccess: date})
+            .then(resposta => {
+                return resposta
+            })
+            .catch(erro => {
+                return erro
+            })
+}
+
+
+module.exports.getUser = username => {
+    return User.findOne({username: username})
+            .then(resposta => {
+                return resposta
+            })
+            .catch(erro => {
+                return erro
+            })
+}
+
+module.exports.addUser = u => {
+    return User.create(u)
+            .then(resposta => {
+                return resposta
+            })
+            .catch(erro => {
+                return erro
+            })
+}
+
+
+module.exports.updateUser = (id, info) => {
+    return User.updateOne({_id:id}, info)
+            .then(resposta => {
+                return resposta
+            })
+            .catch(erro => {
+                return erro
+            })
+}
+
+module.exports.updateUserStatus = (id, status) => {
+    return User.updateOne({username: id}, {active: status})
+            .then(resposta => {
+                return resposta
+            })
+            .catch(erro => {
+                return erro
+            })
+}
+
+module.exports.updateUserPassword = (id, pwd) => {
+    return User.updateOne({_id:id}, pwd)
+            .then(resposta => {
+                return resposta
+            })
+            .catch(erro => {
+                return erro
+            })
+}
+
+module.exports.deleteUser = id => {
+    return User.deleteOne({_id:id})
+            .then(resposta => {
+                return resposta
+            })
+            .catch(erro => {
+                return erro
+            })
+}
+ 

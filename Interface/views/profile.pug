@@ -1,0 +1,75 @@
+doctype html
+html
+    head
+        title AcordWEB
+        meta(charset="utf-8")
+        link(rel='stylesheet', href='/stylesheets/profile.css')
+        link(rel='stylesheet', href='/stylesheets/bootstrap.css')
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+    body.pr
+        .container.profile
+            .row 
+                .col-md-4
+                    .profile-img
+                        img(src="/images/justice.jpeg" alt="")
+                        p #{profile.username}
+                        h6: i.fa.fa-map-pin &nbsp&nbsp#{profile.localidade}
+                .col-md-6
+                    .profile-head
+                        h2 #{profile.name}
+                        br
+                        if profile.active
+                            span.status Status: &nbsp
+                                .online-indicator ONLINE
+                            p 
+                            span.status Último Acesso: &nbsp
+                                .access-indicator Now
+                        else
+                            p.status-offline OFFLINE
+                            p.lastAccess Last Access: #{profile.lastAccess}
+                        ul.nav.nav-tabs#myTab(role="tablist")
+                            li.nav-item
+                                a.nav-link.active#home-tab(data_toggle="#home" role="tab" aria-controls="home" aria-selected="true") Informações Gerais
+                .col-md-2
+                    button.profile-edit-btn
+                        a(href="/editarPerfil") Editar Perfil &nbsp
+                            i.fa.fa-pencil
+            .row 
+                .col-md-4
+                    .config-options
+                        p: i.fa.fa-gear &nbsp Opções de Configuração
+                        button.config-op1
+                            a(href="/alterarPassword") Alterar Password
+                        button.config-op2
+                            a(href="/eliminarConta") Eliminar Conta
+                .col-md-8
+                    .tab-content.profile-tab#myTabContent
+                        .tab-pane.fade.show.active#home(role="tabpanel" aria-labelledby="home-tab")
+                            .row
+                                .col-md-6
+                                    label Profissão
+                                .col-md-6
+                                    p #{profile.profissao}
+                            .row
+                                .col-md-6
+                                    label Idade
+                                .col-md-6
+                                    p #{profile.idade}
+                            .row
+                                .col-md-6
+                                    label Email
+                                .col-md-6
+                                    p #{profile.email}
+                            .row
+                                .col-md-6
+                                    label Nível
+                                .col-md-6
+                                    p #{profile.level}
+        
+        .footer
+                p #[strong AcordWEB] é um site desenvolvido com o objetivo de facilitar o processo de consulta/manipulação de acórdãos jurídicos
+                p &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                p &copy; 2023 Engenharia Web&emsp;@&emsp;
+                a(href="https://www.linkedin.com/in/duarte-parente-980375264/" target="_blank") Duarte Parente
+                p &emsp;|&emsp;
+                a(href="https://www.linkedin.com/in/jos%C3%A9-moreira-a50884241/" target="_blank") José Moreira

@@ -1,0 +1,46 @@
+extends layout
+
+block content
+  .pt-5
+    h1.text-center.loginHeader Edição de conta
+    .container
+      .row
+        div(class="col-md-5 mx-auto")
+          div(class="card card-body")
+            p(style="text-align: center") Introduza as suas credenciais
+            .form
+              form(action="/registo" method="POST")
+                div(class="form-group required") 
+                  label Nome
+                  input.form-control(type="text" name="name" value=`${user.username}` required)
+                div(class="form-group required")
+                  label Email
+                  input.form-control(type="email" name="email" required)
+                div(class="form-group required")
+                  label Idade
+                  input.form-control(type="number" name="idade" min="1" max="130" required)
+                div(class="form-group required")
+                  label Profissão
+                  input.form-control(type="text" name="profissao" required)
+                div(class="form-group required")
+                  label Localidade
+                  input.form-control(type="text" name="localidade" required)
+                div(class="form-group required")
+                  label Username
+                  input.form-control(type="text" name="username" required)
+                div(class="form-group required")
+                  label Password
+                  input.form-control(type="password" name="password" required)
+                div(class="form-check-inline")
+                  input.form-check-input(type="radio" name="level" id="inlineCheckbox1" value="admin" required)
+                  label.form-check-label(for="inlineCheckbox1") Administrador
+                div(class="form-check-inline")
+                  input.form-check-input(type="radio" name="level" id="inlineCheckbox2" value="normal" required)
+                  label.form-check-label(for="inlineCheckbox2") Consumidor
+                br
+                br
+                div(class="form-group pt-1")
+                  button(class="btn btn-primary btn-block" type="submit") Registar
+            p(class="small-xl pt-3 text-center")
+              span.text-muted Já tens conta?
+              a(href="/login") &nbsp Efetuar Login

@@ -1,0 +1,111 @@
+html 
+    head 
+        title AcordWEB 
+        link(rel="stylesheet" href="/stylesheets/acordao-page.css")
+    body
+        script. 
+            function dropDownToggle() {
+                var toggle = document.querySelector('.dropdown');
+                toggle.classList.toggle('active');
+            }
+        
+        script.
+            function toggle() {
+                var blur = document.getElementById('blur');
+                blur.classList.toggle('active');
+
+                var popup = document.getElementById('popup');
+                popup.classList.toggle('active');
+            }
+        
+        script. 
+            function resetInputs() {
+                const inputElements = document.querySelectorAll('.input-container input');
+
+                inputElements.forEach(function(input) {
+                    input.value = input.defaultValue;
+                });
+            }
+
+        .container#blur
+            nav.navbar
+                a(href="/")
+                    img(src="/images/logo.png" class="logo")
+                ul.nav-links
+                    .menu
+                        if log
+                            .action 
+                                .profile 
+                                    img(src="/images/justice.jpeg" onclick="dropDownToggle();")
+                                .dropdown
+                                    h3= username
+                                    ul 
+                                        li.p: a(href="/perfil") Perfil
+                                        li.f: a(href="/") Favoritos 
+                                        li.l: a(href="/logout") Logout
+
+                        else
+                            li: a(href="/login") Login/Registar
+            
+            .content         
+                .title
+                    h1 Processo #{a.Processo}
+                    ul
+                        li.bt: a(href="javascript:void(0)", onclick="goBack()") Voltar
+                        script.
+                            function goBack() {
+                                window.history.go(-1);
+                            }
+                        if adm == true
+                            li: a(href="#" onclick="toggle(); event.preventDefault();")
+                                img.ed(src="/images/edit.png")
+                        if log == true
+                            li: a(href="/")
+                                img.fv(src="/images/heart.png")
+                
+                .box
+                    .table-wrapper
+                        table 
+                            each key in Object.keys(a)
+                                tr
+                                    if key != '_id' && key != 'Processo'
+                                        if key in d
+                                            td.key= d[key]
+                                        else
+                                            if key == 'url'
+                                            td.key= key
+                                        if key == 'url'
+                                            td
+                                                a(href="http://www.dgsi.pt" + a[key] target='_blank')= a[key]
+                                        else 
+                                            td= a[key]
+
+            .footer
+                p #[strong AcordWEB] é um site desenvolvido com o objetivo de facilitar o processo de consulta/manipulação de acórdãos jurídicos
+                p &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                p &copy; 2023 Engenharia Web&emsp;@&emsp;
+                a(href="https://www.linkedin.com/in/duarte-parente-980375264/" target="_blank") Duarte Parente
+                p &emsp;|&emsp;
+                a(href="https://www.linkedin.com/in/jos%C3%A9-moreira-a50884241/" target="_blank") José Moreira
+
+        #popup
+            form(action=`/processo/editar/${a._id}` method="POST")
+                p Processo #{a.Processo}
+                table 
+                    each key in Object.keys(a)
+                        tr
+                            if key != '_id' && key != 'Processo'
+                                if key in d
+                                    td.key= d[key]
+                                else
+                                    if key == 'url'
+                                    td.key= key
+                                td.inp
+                                    .input-container
+                                        if key == 'Descritores'
+                                            input(name="messi" type="text" readonly value=a[key])
+                                        else 
+                                           input(name=key type="text" value=a[key])
+
+                img.popup-image(src='/images/close.png', alt='close', onclick=`toggle(); resetInputs()`)
+                button(type='submit') Guardar alterações
