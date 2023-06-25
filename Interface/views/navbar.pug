@@ -1,0 +1,19 @@
+nav.navbar
+    a(href="/")
+        img(src="/images/logo.png" class="logo")
+    ul.nav-links
+        .menu
+            if log
+                .action 
+                    .profile 
+                        img(src="/images/justice.jpeg" onclick="dropDownToggle();")
+                    .dropdown
+                        h3= username
+                        ul 
+                            li.p: a(href="/perfil") Perfil
+                            li.f: a(href="/") Favoritos
+                            if adm == true 
+                                li.a: a(href="/adicionar") Novo acórdão
+                            li.l: a(href="/logout") Logout
+            else
+                li: a(href="/login") Login/Registar

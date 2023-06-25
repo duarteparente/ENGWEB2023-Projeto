@@ -2,6 +2,8 @@ html
     head 
         title AcordWEB 
         link(rel="stylesheet" href="/stylesheets/addAc-page.css")
+        link(rel="stylesheet" href="/stylesheets/footer.css")
+        link(rel="stylesheet" href="/stylesheets/navbar.css")
     body
         script. 
             function dropDownToggle() {
@@ -9,26 +11,8 @@ html
                 toggle.classList.toggle('active');
             }
         .container
-            nav.navbar
-                a(href="/")
-                    img(src="/images/logo.png" class="logo")
-                ul.nav-links
-                    .menu
-                        if log
-                            .action 
-                                .profile 
-                                    img(src="/images/justice.jpeg" onclick="dropDownToggle();")
-                                .dropdown
-                                    h3= username
-                                    ul 
-                                        li.p: a(href="/perfil") Perfil
-                                        li.f: a(href="/") Favoritos
-                                        if adm == true 
-                                            li.a: a(href="/adicionar") Novo acórdão
-                                        li.l: a(href="/logout") Logout
-
-                        else
-                            li: a(href="/login") Login/Registar
+        
+            include navbar.pug
             
             .content
                 form(action=`/adicionar` method="POST")        
@@ -54,10 +38,4 @@ html
 
                     button.cr(type='submit') Adicionar
 
-            .footer
-                p #[strong AcordWEB] é um site desenvolvido com o objetivo de facilitar o processo de consulta/manipulação de acórdãos jurídicos
-                p &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-                p &copy; 2023 Engenharia Web&emsp;@&emsp;
-                a(href="https://www.linkedin.com/in/duarte-parente-980375264/" target="_blank") Duarte Parente
-                p &emsp;|&emsp;
-                a(href="https://www.linkedin.com/in/jos%C3%A9-moreira-a50884241/" target="_blank") José Moreira
+            include footer.pug

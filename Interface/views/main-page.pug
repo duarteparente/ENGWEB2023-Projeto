@@ -3,6 +3,8 @@ html
         title AcordWEB 
         link(rel="stylesheet" href="/stylesheets/main-page.css")
         link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+        link(rel="stylesheet" href="/stylesheets/footer.css")
+        link(rel="stylesheet" href="/stylesheets/navbar.css")
     body
         script.
             function handleButtonClickP() {
@@ -39,25 +41,9 @@ html
             }
 
         .container#blur
-            nav.navbar
-                img(src="/images/logo.png" class="logo")
-                ul.nav-links
-                    .menu
-                        if log
-                            .action 
-                                .profile 
-                                    img(src="/images/justice.jpeg" onclick="dropDownToggle();")
-                                .dropdown
-                                    h3= username
-                                    ul 
-                                        li.p: a(href="/perfil") Perfil
-                                        li.f: a(href="/") Favoritos
-                                        if adm == true 
-                                            li.a: a(href="/adicionar") Novo acórdão
-                                        li.l: a(href="/logout") Logout
-
-                        else
-                            li: a(href="/login") Login/Registar
+        
+            include navbar.pug
+            
             .row 
                 .col1
                     h1 Pesquisa por Processo
@@ -95,13 +81,7 @@ html
                         a(href="#" onclick="toggle('popup14'); event.preventDefault();") JTRP
          
 
-            .footer
-                p #[strong AcordWEB] é um site desenvolvido com o objetivo de facilitar o processo de consulta/manipulação de acórdãos jurídicos
-                p &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-                p &copy; 2023 Engenharia Web&emsp;@&emsp;
-                a(href="https://www.linkedin.com/in/duarte-parente-980375264/" target="_blank") Duarte Parente
-                p &emsp;|&emsp;
-                a(href="https://www.linkedin.com/in/jos%C3%A9-moreira-a50884241/" target="_blank") José Moreira
+            include footer.pug
         
         - 
             var popups = [{ id: 'popup1', title: 'Acórdãos do Tribunal Constitucional', value: 'atco1' },

@@ -17,13 +17,14 @@ router.get('/acordaos', function(req, res) {
   }
 });
 
-
+/*
 router.get('/acordaos/tribunais/:tribunal', function(req, res) {
   Acordao.getAcordaosTribunal(req.params.tribunal)
     .then(dados => res.status(200).json(dados))
     .catch(erro => res.status(520).json({erro: erro, mensagem: "Não consegui obter a lista de acórdãos pertencentes a essa instituição!"}))
 
 });
+*/
 
 
 router.get('/acordaos/tribunal', function(req, res) {

@@ -161,29 +161,6 @@ router.get('/tribunal', function(req, res, next) {
 });
 
 
-router.post('/processo/editar/:id', function(req, res, next) {
-  var token = req.cookies.token;
-      if(token && user){
-        (user.level == 'admin') ? admin = true : admin = false
-        if (admin == true) {
-          axios.put('http://localhost:22231/acordaos/editar/' + req.params.id, req.body)
-            .then(resposta => {
-              res.render('acordao-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, a: resposta.data })
-            })
-            .catch(error => {
-              res.render('error', {err: error, message: 'ERROR'})
-            })
-        }
-        else {
-          res.render('main-page', {log: true, adm: admin, username: user.username, lvl: user.level })
-        }      
-      }
-      else{
-        res.render('loginForm', {message: 'OK'})
-      }
-});
-
-
 router.get('/processo/:id', function(req, res, next) {
   axios.get('http://localhost:22231/acordaos?processo=' + req.params.id)
     .then(resposta => {
@@ -197,7 +174,6 @@ router.get('/processo/:id', function(req, res, next) {
           res.render('acordao-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, a: resposta.data })
         }
         else{
-          //res.render('profile', {username: "duarteparente", active:true})
           res.render('acordao-page', {log: false, d: dict, a: resposta.data })
         }
       }
@@ -234,12 +210,35 @@ router.get('/adicionar', function(req, res, next) {
       res.render('addAc-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, msg: 'OK'})
     }
     else {
-      res.render('loginForm', {message: 'OK'})
+      res.render('main-page', {log: true, adm: admin, username: user.username, lvl: user.level })
     }
   }
   else{
     res.render('loginForm', {message: 'OK'})
   }
+});
+
+
+router.post('/processo/editar/:id', function(req, res, next) {
+  var token = req.cookies.token;
+      if(token && user){
+        (user.level == 'admin') ? admin = true : admin = false
+        if (admin == true) {
+          axios.put('http://localhost:22231/acordaos/editar/' + req.params.id, req.body)
+            .then(resposta => {
+              res.render('acordao-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, a: resposta.data })
+            })
+            .catch(error => {
+              res.render('error', {err: error, message: 'ERROR'})
+            })
+        }
+        else {
+          res.render('main-page', {log: true, adm: admin, username: user.username, lvl: user.level })
+        }      
+      }
+      else{
+        res.render('loginForm', {message: 'OK'})
+      }
 });
 
 
