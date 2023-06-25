@@ -95,13 +95,24 @@ module.exports.createAcordao = a => {
     return Acordao.findOne({ Processo: a.Processo })
         .then(proc => {
             if (proc) {
-                return {};
+                return {}
             } 
             else {
                 return Acordao.create(a)
             }
         })
         .catch(erro => {
-            return erro;
-        });
-};
+            return erro
+        })
+}
+
+
+module.exports.deleteAcordao = id => {
+    return Acordao.deleteOne({_id:id})
+            .then(resposta => {
+                return resposta
+            })
+            .catch(erro => {
+                return erro
+            })
+}

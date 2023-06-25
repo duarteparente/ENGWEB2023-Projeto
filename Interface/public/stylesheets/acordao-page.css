@@ -88,18 +88,16 @@ img.ed {
     top: 150px;
 }
 
-img.ed:hover {
-    background-color: yellow;
+img.el {
+    position: absolute;
+    right: 400px;
+    top: 150px;
 }
 
 img.fv {
     position: absolute;
     right: 200px;
     top: 150px;
-}
-
-img.fv:hover {
-    background-color: red;
 }
 
 .box {
@@ -195,7 +193,7 @@ table a {
     transition: 0.5s;
 }
 
-#popup p {
+#popup h1 {
     font-size: 24px;
     margin-bottom: 30px;
     font-weight: bold;
@@ -228,7 +226,69 @@ table a {
     margin-top: 40px;
     margin-left: 900px;
     border-radius: 20px;
+    font-size: 20px;
+    cursor: pointer;
+    height: 50px;
+    width: 200px;
+    color: rgba(7,13,89,255);
+}
+ 
+
+#popup button:hover {
+    background-color: #3619da;
+    border-radius: 5px;
+    transition: 0.3s ease;
+    color: white;
+    border: none;
+}
+
+.popup-image {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+#popupE {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 800px;
+    height: 500px;
+    padding: 50px;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+    background: rgba(7,13,89,255);
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.5s;
+    border: 2px solid #000;
+    border-radius: 5px;
+    color: white;
     font-size: 18px;
+}
+
+#popupE.active {
+    top: 50%;
+    visibility: visible;
+    opacity: 1;
+    transition: 0.5s;
+}
+
+#popupE h1 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+#popupE button {
+    position: relative;
+    margin-top: 270px;
+    margin-left: 500px;
+    border-radius: 20px;
+    font-size: 24px;
     cursor: pointer;
     height: 50px;
     width: 200px;
@@ -236,7 +296,69 @@ table a {
 }
   
 
-#popup button:hover {
+#popupE button:hover {
+    background-color: #3619da;
+    border-radius: 5px;
+    transition: 0.3s ease;
+    color: white;
+    border: none;
+}
+
+.popup-image {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+#popupF {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 800px;
+    height: 500px;
+    padding: 50px;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+    background: rgba(7,13,89,255);
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.5s;
+    border: 2px solid #000;
+    border-radius: 5px;
+    color: white;
+    font-size: 18px;
+}
+
+#popupF.active {
+    top: 50%;
+    visibility: visible;
+    opacity: 1;
+    transition: 0.5s;
+}
+
+#popupF h1 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+#popupF button {
+    position: relative;
+    margin-top: 270px;
+    margin-left: 500px;
+    border-radius: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    height: 50px;
+    width: 200px;
+    color: rgba(7,13,89,255);
+}
+  
+
+#popupFs button:hover {
     background-color: #3619da;
     border-radius: 5px;
     transition: 0.3s ease;

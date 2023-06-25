@@ -11,16 +11,30 @@ html
                 toggle.classList.toggle('active');
             }
         
-        script.
-            function toggle() {
+            function toggleEd() {
                 var blur = document.getElementById('blur');
                 blur.classList.toggle('active');
 
                 var popup = document.getElementById('popup');
                 popup.classList.toggle('active');
             }
+
+            function toggleEl() {
+                var blur = document.getElementById('blur');
+                blur.classList.toggle('active');
+
+                var popup = document.getElementById('popupE');
+                popup.classList.toggle('active');
+            }
+
+            function toggleFv() {
+                var blur = document.getElementById('blur');
+                blur.classList.toggle('active');
+
+                var popup = document.getElementById('popupF');
+                popup.classList.toggle('active');
+            }
         
-        script. 
             function resetInputs() {
                 const inputElements = document.querySelectorAll('.input-container input');
 
@@ -43,11 +57,13 @@ html
                                 window.history.go(-1);
                             }
                         if adm == true
-                            li: a(href="#" onclick="toggle(); event.preventDefault();")
-                                img.ed(src="/images/edit.png")
+                            li: a(href="#" onclick="toggleEd(); event.preventDefault();" title)
+                                img.ed(src="/images/edit2.png")
+                            li: a(href="#" onclick="toggleEl(); event.preventDefault();")
+                                img.el(src="/images/garbage2.png")
                         if log == true
-                            li: a(href="/")
-                                img.fv(src="/images/heart.png")
+                            li: a(href="#" onclick="toggleFv(); event.preventDefault();")
+                                img.fv(src="/images/heart2.png")
                 
                 .box
                     .table-wrapper
@@ -70,7 +86,7 @@ html
 
         #popup
             form(action=`/processo/editar/${a._id}` method="POST")
-                p Processo #{a.Processo}
+                h1 Editar processo
                 table 
                     each key in Object.keys(a)
                         tr
@@ -85,5 +101,22 @@ html
                                         if key != 'Descritores'
                                             input(name=key type="text" value=a[key])
 
-                img.popup-image(src='/images/close.png', alt='close', onclick=`toggle(); resetInputs()`)
+                img.popup-image(src='/images/close.png', alt='close', onclick=`toggleEd(); resetInputs()`)
                 button(type='submit') Guardar alterações
+        
+        #popupE
+            form(action=`/processo/eliminar/${a._id}` method="POST")
+                h1 Eliminar processo
+                p Tem a certeza de que pretende eliminar este registo?
+
+                img.popup-image(src='/images/close.png', alt='close', onclick=`toggleEl()`)
+                button(type='submit') Confirmar
+        
+        #popupF
+            form(action=`/processo/favoritar/${a._id}` method="POST")
+                h1 Adicionar processo aos favoritos
+                p Descrição
+                
+
+                img.popup-image(src='/images/close.png', alt='close', onclick=`toggleFv(); resetInputs()`)
+                button(type='submit') Confirmar

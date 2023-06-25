@@ -197,7 +197,7 @@ router.get('/perfil', function(req, res, next) {
       })
   }
   else{
-    res.render('loginForm', {message: 'OK'})
+    res.redirect('/login');
   }
 });
 
@@ -210,11 +210,11 @@ router.get('/adicionar', function(req, res, next) {
       res.render('addAc-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, msg: 'OK'})
     }
     else {
-      res.render('main-page', {log: true, adm: admin, username: user.username, lvl: user.level })
+      res.redirect('/');
     }
   }
   else{
-    res.render('loginForm', {message: 'OK'})
+    res.redirect('/login');
   }
 });
 
@@ -233,11 +233,36 @@ router.post('/processo/editar/:id', function(req, res, next) {
             })
         }
         else {
-          res.render('main-page', {log: true, adm: admin, username: user.username, lvl: user.level })
+          res.redirect('/');
         }      
       }
       else{
-        res.render('loginForm', {message: 'OK'})
+        res.redirect('/login');
+      }
+});
+
+
+router.post('/processo/eliminar/:id', function(req, res, next) {
+  var token = req.cookies.token;
+      if(token && user){
+        (user.level == 'admin') ? admin = true : admin = false
+        if (admin == true) {
+          axios.delete('http://localhost:22231/acordaos/' + req.params.id)
+            .then(() => {
+              res.redirect('/');
+            })
+            .catch(error => {
+              res.render('error', {err: error, message: 'ERROR'})
+            })
+        }
+
+        else {
+          res.redirect('/');
+        }
+      }
+      
+      else {
+        res.redirect('/login');
       }
 });
 
@@ -263,11 +288,11 @@ router.post('/adicionar', function(req, res, next) {
             })
         }
         else {
-          res.render('main-page', {log: true, adm: admin, username: user.username, lvl: user.level })
+          res.redirect('/');
         }      
       }
       else{
-        res.render('loginForm', {message: 'OK'})
+        res.redirect('/login');
       }
 });
 
