@@ -101,33 +101,20 @@ module.exports.deleteUser = id => {
 }
 
 module.exports.addFav = (username, fav) => {
-    return User.findOne({username: username})
+    return User.updateOne({ username: username }, { $push: { favs: fav } })
         .then(resposta => {
-            console.log("AQUI")
-            console.log(resposta)
-            const found = resposta.favs.some(favv => favv.Processo === fav.Processo);
-            
-            if (found) {
-                console.log("AQUI1")
-                return User.updateOne({ username: username }, { $pull: { favs: { Processo: fav.Processo } } })
-                    .then(resposta => {
-                        return resposta
-                    })
-                    .catch(erro => {
-                        return erro
-                    })
-            }
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
 
-            else {
-                console.log("AQUI2")
-                return User.updateOne({ username: username }, { $push: { favs: fav } })
-                    .then(resposta => {
-                        return resposta
-                    })
-                    .catch(erro => {
-                        return erro
-                    })
-            }
+
+module.exports.retiraFav = (username, fav) => {
+    return User.updateOne({ username: username }, { $pull: { favs: { Processo: fav.Processo } } })
+        .then(resposta => {
+            return resposta
         })
         .catch(erro => {
             return erro

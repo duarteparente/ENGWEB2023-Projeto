@@ -64,7 +64,7 @@ html
                         if log == true
                             - var favItem = favs.find(obj => obj.Processo === a.Processo)
                             if favItem 
-                                li: a(href="/processo/removeFav/" + a.Processo)
+                                li: a(href="/processo/removeFav/" + a.Processo.replaceAll("/", "%2F"))
                                     img.fv(src="/images/heart-red.png")
 
                             else 
@@ -91,7 +91,7 @@ html
             include footer.pug
 
         #popup
-            form(action=`/processo/editar/${a._id}` method="POST")
+            form(action=`/processo/editar?id=${a._id}&Processo=${a.Processo}` method="POST")
                 h1 Editar processo
                 table 
                     each key in Object.keys(a)
@@ -111,7 +111,7 @@ html
                 button(type='submit') Guardar alterações
         
         #popupE
-            form(action=`/processo/eliminar/${a._id}` method="POST")
+            form(action=`/processo/eliminar?id=${a._id}&Processo=${a.Processo}` method="POST")
                 h1 Eliminar processo
                 p Tem a certeza de que pretende eliminar este registo?
 
@@ -119,10 +119,11 @@ html
                 button(type='submit') Confirmar
         
         #popupF
-            form(action=`/processo/fav/${a.Processo}` method="POST")
+            form(action='/processo/fav/' + a.Processo.replaceAll("/", "%2F") method="POST")
                 h1 Adicionar processo aos favoritos
-                p Insira a descrição
-                input(name="Descricao" type="text")
+                p Insira uma descrição (opcional)
+                .input-container
+                    input(name="Descricao" type="text")
                 
 
                 img.popup-image(src='/images/close.png', alt='close', onclick=`toggleFv(); resetInputs()`)

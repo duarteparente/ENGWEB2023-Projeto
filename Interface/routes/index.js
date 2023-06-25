@@ -205,6 +205,25 @@ router.get('/perfil', function(req, res, next) {
 });
 
 
+router.get('/favoritos', function(req, res, next) {
+  var token = req.cookies.token;
+  if(token && user){
+    (user.level == 'admin') ? admin = true : admin = false
+    axios.post("http://localhost:22230/users/" + user.username + "/perfil", {tkn: token})
+      .then(response => {
+        res.render('favs', {log: true, adm: admin, username: user.username, favs: response.data.dados.favs})
+      })
+      .catch(e => {
+        res.render('error', {err: error, message: 'ERROR'})
+      })
+  }
+  else{
+    res.redirect('/login');
+  }
+});
+
+
+
 router.get('/adicionar', function(req, res, next) {
   var token = req.cookies.token;
   if(token && user){
@@ -225,9 +244,9 @@ router.get('/adicionar', function(req, res, next) {
 router.get('/processo/removeFav/:Processo', function(req, res, next) {
   var token = req.cookies.token;
       if(token && user){
-        axios.post('http://localhost:22230/users/' + user.username + '/fav', {tkn: token, Processo: req.params.Processo, Descricao: ""})
+        axios.post('http://localhost:22230/users/' + user.username + '/retiraFav', {tkn: token, Processo: req.params.Processo, Descricao: ""})
         .then(() => {
-          res.redirect("/processo/" + req.params.Processo);
+          res.redirect("/processo/" + req.params.Processo.replaceAll("/", "%2F"));
         })
         .catch(error => {
           res.render('error', {err: error, message: 'ERROR'})
@@ -240,14 +259,14 @@ router.get('/processo/removeFav/:Processo', function(req, res, next) {
 });
 
 
-router.post('/processo/editar/:id', function(req, res, next) {
+router.post('/processo/editar', function(req, res, next) {
   var token = req.cookies.token;
       if(token && user){
         (user.level == 'admin') ? admin = true : admin = false
         if (admin == true) {
-          axios.put('http://localhost:22231/acordaos/editar/' + req.params.id, req.body)
-            .then(resposta => {
-              res.render('acordao-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, a: resposta.data })
+          axios.put('http://localhost:22231/acordaos/editar/' + req.query.id, req.body)
+            .then(() => {
+              res.redirect("/processo/" + req.query.Processo.replaceAll("/", "%2F"));
             })
             .catch(error => {
               res.render('error', {err: error, message: 'ERROR'})
@@ -263,20 +282,25 @@ router.post('/processo/editar/:id', function(req, res, next) {
 });
 
 
-router.post('/processo/eliminar/:id', function(req, res, next) {
+router.post('/processo/eliminar', function(req, res, next) {
   var token = req.cookies.token;
       if(token && user){
         (user.level == 'admin') ? admin = true : admin = false
         if (admin == true) {
-          axios.delete('http://localhost:22231/acordaos/' + req.params.id)
+          axios.post('http://localhost:22230/users/' + user.username + '/retiraFav', {tkn: token, Processo: req.query.Processo, Descricao: ""})
             .then(() => {
-              res.redirect('/');
+              axios.delete('http://localhost:22231/acordaos/' + req.params.id)
+                .then(() => {
+                  res.redirect('/');
+                })
+                .catch(error => {
+                  res.render('error', {err: error, message: 'ERROR'})
+                }) 
             })
             .catch(error => {
               res.render('error', {err: error, message: 'ERROR'})
-            })
+          })
         }
-
         else {
           res.redirect('/');
         }
@@ -300,9 +324,9 @@ router.post('/adicionar', function(req, res, next) {
           axios.post('http://localhost:22231/acordaos', filtered)
             .then(resposta => {
               if (Object.keys(resposta.data).length == 0)
-              res.render('addAc-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, msg: 'NO'})
+                res.render('addAc-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, msg: 'NO'})
               else
-                res.render('acordao-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, a: resposta.data })
+                res.redirect('/processo/' + resposta.data.Processo)
             })
             .catch(error => {
               res.render('error', {err: error, message: 'ERROR'})
@@ -323,7 +347,7 @@ router.post('/processo/fav/:Processo', function(req, res, next) {
       if(token && user){
         axios.post('http://localhost:22230/users/' + user.username + '/fav', {tkn: token, Processo: req.params.Processo, Descricao: req.body.Descricao})
         .then(() => {
-          res.redirect("/processo/" + req.params.Processo);
+          res.redirect("/processo/" + req.params.Processo.replaceAll("/", "%2F"));
         })
         .catch(error => {
           res.render('error', {err: error, message: 'ERROR'})
