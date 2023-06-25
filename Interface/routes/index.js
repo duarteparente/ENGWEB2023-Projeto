@@ -289,7 +289,8 @@ router.post('/processo/eliminar', function(req, res, next) {
         if (admin == true) {
           axios.post('http://localhost:22230/users/' + user.username + '/retiraFav', {tkn: token, Processo: req.query.Processo, Descricao: ""})
             .then(() => {
-              axios.delete('http://localhost:22231/acordaos/' + req.params.id)
+              console.log(req.query.id)
+              axios.delete('http://localhost:22231/acordaos/' + req.query.id)
                 .then(() => {
                   res.redirect('/');
                 })

@@ -22,19 +22,35 @@ html
                         p.err O processo já se encontra na base de dados!
 
                     .box
-                            .table-wrapper
-                                table 
+                        .table-wrapper
+                            table 
+                                tr 
+                                    th Atributos 
+                                    th Campos de preenchimento 
+                                each key in Object.keys(d)  
                                     tr 
-                                        th Atributos 
-                                        th Campos de preenchimento 
-                                    each key in Object.keys(d)  
-                                        tr 
-                                            td.key= d[key]
-                                            td
-                                                if key == "Processo"
-                                                    input(name=key type="text" required)
-                                                else 
-                                                    input(name=key type="text")
+                                        td.key= d[key]
+                                        td
+                                            if key == "Processo"
+                                                input(name=key type="text" required)
+                                            else if key == 'tribunal'
+                                                select(name="tribunal")
+                                                    option(value="atco1") atco1
+                                                    option(value="jcon") jcon
+                                                    option(value="jdgpj") jdgpj
+                                                    option(value="jsta") jsta
+                                                    option(value="jstj") jstj
+                                                    option(value="jtca") jtca
+                                                    option(value="jtcampca") jtcampca
+                                                    option(value="jtcampct") jtcampct
+                                                    option(value="jtcn") jtcn
+                                                    option(value="jtrc") jtrc
+                                                    option(value="jtre") jtre
+                                                    option(value="jtrg") jtrg
+                                                    option(value="jtrl") jtrl
+                                                    option(value="jtrp") jtrp
+                                            else
+                                                input(name=key type="text")
 
                     button.cr(type='submit') Adicionar
 
