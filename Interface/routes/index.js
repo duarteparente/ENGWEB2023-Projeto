@@ -171,7 +171,10 @@ router.get('/processo/:id', function(req, res, next) {
         var token = req.cookies.token;
         if(token && user){
           (user.level == 'admin') ? admin = true : admin = false
-          res.render('acordao-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, a: resposta.data })
+          axios.post("http://localhost:22230/users/" + user.username + "/perfil", {tkn: token})
+            .then(response => {
+              res.render('acordao-page', {log: true, adm: admin, username: user.username, favs: response.data.dados.favs, lvl: user.level, d: dict, a: resposta.data })
+            })
         }
         else{
           res.render('acordao-page', {log: false, d: dict, a: resposta.data })
@@ -216,6 +219,24 @@ router.get('/adicionar', function(req, res, next) {
   else{
     res.redirect('/login');
   }
+});
+
+
+router.get('/processo/removeFav/:Processo', function(req, res, next) {
+  var token = req.cookies.token;
+      if(token && user){
+        axios.post('http://localhost:22230/users/' + user.username + '/fav', {tkn: token, Processo: req.params.Processo, Descricao: ""})
+        .then(() => {
+          res.redirect("/processo/" + req.params.Processo);
+        })
+        .catch(error => {
+          res.render('error', {err: error, message: 'ERROR'})
+        })
+      }
+      
+      else {
+        res.redirect('/login');
+      }
 });
 
 
@@ -292,6 +313,24 @@ router.post('/adicionar', function(req, res, next) {
         }      
       }
       else{
+        res.redirect('/login');
+      }
+});
+
+
+router.post('/processo/fav/:Processo', function(req, res, next) {
+  var token = req.cookies.token;
+      if(token && user){
+        axios.post('http://localhost:22230/users/' + user.username + '/fav', {tkn: token, Processo: req.params.Processo, Descricao: req.body.Descricao})
+        .then(() => {
+          res.redirect("/processo/" + req.params.Processo);
+        })
+        .catch(error => {
+          res.render('error', {err: error, message: 'ERROR'})
+        })
+      }
+      
+      else {
         res.redirect('/login');
       }
 });

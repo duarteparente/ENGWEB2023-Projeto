@@ -63,6 +63,14 @@ router.post('/registo', function(req, res) {
   })
 })
 
+router.post('/:usr/fav', auth.verificaAcesso, function(req, res) {
+  User.addFav(req.params.usr, req.body)
+    .then(dados => res.status(201).jsonp({dados: dados}))
+    .catch(erro => {
+      res.render('error', {error: erro, message: "Erro na alteração de favoritos do utilizador"})
+    })
+})
+
 // POST /users/:usr/login  -  Efetua o login do utilizador
 router.post('/:usr/login', passport.authenticate('local'), function(req, res){
   var d = new Date().toISOString().substring(0,19)

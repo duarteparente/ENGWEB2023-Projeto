@@ -62,8 +62,14 @@ html
                             li: a(href="#" onclick="toggleEl(); event.preventDefault();")
                                 img.el(src="/images/garbage2.png")
                         if log == true
-                            li: a(href="#" onclick="toggleFv(); event.preventDefault();")
-                                img.fv(src="/images/heart2.png")
+                            - var favItem = favs.find(obj => obj.Processo === a.Processo)
+                            if favItem 
+                                li: a(href="/processo/removeFav/" + a.Processo)
+                                    img.fv(src="/images/heart-red.png")
+
+                            else 
+                                li: a(href="#" onclick="toggleFv(); event.preventDefault();")
+                                    img.fv(src="/images/heart2.png")
                 
                 .box
                     .table-wrapper
@@ -113,9 +119,10 @@ html
                 button(type='submit') Confirmar
         
         #popupF
-            form(action=`/processo/favoritar/${a._id}` method="POST")
+            form(action=`/processo/fav/${a.Processo}` method="POST")
                 h1 Adicionar processo aos favoritos
-                p Descrição
+                p Insira a descrição
+                input(name="Descricao" type="text")
                 
 
                 img.popup-image(src='/images/close.png', alt='close', onclick=`toggleFv(); resetInputs()`)

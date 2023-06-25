@@ -345,9 +345,24 @@ table a {
     font-weight: bold;
 }
 
+#popupF p {
+    margin-bottom: 10px;
+}
+
+#popupF input {
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 600px;
+    height: 50px;
+    background-color: white;
+    color: rgba(7,13,89,255);
+    white-space: nowrap;
+}
+
 #popupF button {
     position: relative;
-    margin-top: 270px;
+    margin-top: 220px;
     margin-left: 500px;
     border-radius: 20px;
     font-size: 24px;
@@ -358,7 +373,7 @@ table a {
 }
   
 
-#popupFs button:hover {
+#popupF button:hover {
     background-color: #3619da;
     border-radius: 5px;
     transition: 0.3s ease;
