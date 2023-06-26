@@ -193,7 +193,6 @@ router.get('/perfil', function(req, res, next) {
     axios.post("http://localhost:22230/users/" + user.username + "/perfil", {tkn: token})
       .then(response => {
         (user.level == 'admin') ? admin = true : admin = false
-        console.log(response.data)
         res.render('profile', {profile: response.data.dados, active: true, log: true,  adm: admin, username: user.username})
       })
       .catch(e => {
