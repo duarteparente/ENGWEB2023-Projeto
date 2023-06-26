@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var axios = require('axios')
 var user, admin
+var logged = false
 var dict = {
   Processo: "Processo",
   url: "url",
@@ -126,10 +127,9 @@ var tribs = {
 
 
 router.get('/', function(req, res){
-  var token = req.cookies.token;
-  if(token && user){
+  if(logged){
     (user.level == 'admin') ? admin = true : admin = false
-    res.render('main-page', {log: true, adm: admin, username: user.username, lvl: user.level })
+    res.render('main-page', {log: true, adm: admin, username: user.username})
   }
   else{
     res.render('main-page', {log: false})
@@ -144,9 +144,8 @@ router.get('/tribunal', function(req, res, next) {
         res.render('not-found');
       }
       else {
-        var token = req.cookies.token;
         var tribunal = tribs[req.query.tribunal]
-        if(token && user){
+        if(logged){
           (user.level == 'admin') ? admin = true : admin = false
           res.render('tribunal-page', {log: true, adm: admin, username: user.username, lvl: user.level, ft: tribunal, acs: resposta.data })
         }
@@ -168,8 +167,8 @@ router.get('/processo/:id', function(req, res, next) {
         res.render('not-found');
       }
       else {
-        var token = req.cookies.token;
-        if(token && user){
+        if(logged){
+          var token = req.cookies[user.username];
           (user.level == 'admin') ? admin = true : admin = false
           axios.post("http://localhost:22230/users/" + user.username + "/perfil", {tkn: token})
             .then(response => {
@@ -188,12 +187,14 @@ router.get('/processo/:id', function(req, res, next) {
 
 
 router.get('/perfil', function(req, res, next) {
-  var token = req.cookies.token;
-  if(token && user){
+  if(logged){
+    var token = req.cookies[user.username];
     (user.level == 'admin') ? admin = true : admin = false
     axios.post("http://localhost:22230/users/" + user.username + "/perfil", {tkn: token})
       .then(response => {
-        res.render('profile', {profile: response.data, active: true })
+        (user.level == 'admin') ? admin = true : admin = false
+        console.log(response.data)
+        res.render('profile', {profile: response.data.dados, active: true, log: true,  adm: admin, username: user.username})
       })
       .catch(e => {
         res.render('error', {err: error, message: 'ERROR'})
@@ -206,8 +207,8 @@ router.get('/perfil', function(req, res, next) {
 
 
 router.get('/favoritos', function(req, res, next) {
-  var token = req.cookies.token;
-  if(token && user){
+  if(logged){
+    var token = req.cookies[user.username];
     (user.level == 'admin') ? admin = true : admin = false
     axios.post("http://localhost:22230/users/" + user.username + "/perfil", {tkn: token})
       .then(response => {
@@ -225,8 +226,7 @@ router.get('/favoritos', function(req, res, next) {
 
 
 router.get('/adicionar', function(req, res, next) {
-  var token = req.cookies.token;
-  if(token && user){
+  if(logged){
     (user.level == 'admin') ? admin = true : admin = false
     if (admin == true){
       res.render('addAc-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, msg: 'OK'})
@@ -242,8 +242,8 @@ router.get('/adicionar', function(req, res, next) {
 
 
 router.get('/processo/removeFav/:Processo', function(req, res, next) {
-  var token = req.cookies.token;
-      if(token && user){
+      if(logged){
+        var token = req.cookies[user.username];
         axios.post('http://localhost:22230/users/' + user.username + '/retiraFav', {tkn: token, Processo: req.params.Processo, Descricao: ""})
         .then(() => {
           res.redirect("/processo/" + req.params.Processo.replaceAll("/", "%2F"));
@@ -260,8 +260,7 @@ router.get('/processo/removeFav/:Processo', function(req, res, next) {
 
 
 router.post('/processo/editar', function(req, res, next) {
-  var token = req.cookies.token;
-      if(token && user){
+      if(logged){
         (user.level == 'admin') ? admin = true : admin = false
         if (admin == true) {
           axios.put('http://localhost:22231/acordaos/editar/' + req.query.id, req.body)
@@ -283,8 +282,8 @@ router.post('/processo/editar', function(req, res, next) {
 
 
 router.post('/processo/eliminar', function(req, res, next) {
-  var token = req.cookies.token;
-      if(token && user){
+      if(logged){
+        var token = req.cookies[user.username];
         (user.level == 'admin') ? admin = true : admin = false
         if (admin == true) {
           axios.post('http://localhost:22230/users/' + user.username + '/retiraFav', {tkn: token, Processo: req.query.Processo, Descricao: ""})
@@ -313,8 +312,7 @@ router.post('/processo/eliminar', function(req, res, next) {
 
 
 router.post('/adicionar', function(req, res, next) {
-  var token = req.cookies.token;
-      if(token && user){
+      if(logged){
         (user.level == 'admin') ? admin = true : admin = false
         if (admin == true) {
           const filtered = Object.fromEntries(Object.entries(req.body).filter(([key, value]) => value !== ''));
@@ -343,8 +341,8 @@ router.post('/adicionar', function(req, res, next) {
 
 
 router.post('/processo/fav/:Processo', function(req, res, next) {
-  var token = req.cookies.token;
-      if(token && user){
+      if(logged){
+        var token = req.cookies[user.username];
         axios.post('http://localhost:22230/users/' + user.username + '/fav', {tkn: token, Processo: req.params.Processo, Descricao: req.body.Descricao})
         .then(() => {
           res.redirect("/processo/" + req.params.Processo.replaceAll("/", "%2F"));
@@ -369,11 +367,13 @@ router.get('/login', function(req, res){
 router.post('/login', function(req, res){
   axios.post('http://localhost:22230/users/' + req.body.username + '/login', req.body)
     .then(response => {
-      res.cookie('token', response.data.token)
+      logged = true
+      res.cookie(req.body.username, response.data.token)
       user = response.data.user
       res.redirect('/');
     })
     .catch(e =>{
+      logged = false
       res.render('loginForm', {message: "Credenciais inválidas. Tente outra vez!"})
     })
 })
@@ -388,11 +388,13 @@ router.get('/registo', function(req, res){
 router.post('/registo', function(req, res){
   axios.post('http://localhost:22230/users/registo', req.body)
     .then(response => {
-      res.cookie('token', response.data.token)
+      logged = true
+      res.cookie(req.body.username, response.data.token)
       user = response.data.user
       res.redirect('/');
     })
     .catch(e =>{
+      logged = false
       res.render('registerForm', {message: 'Username já existente!'})
     })
 })
@@ -400,9 +402,10 @@ router.post('/registo', function(req, res){
 
 // LOGOUT
 router.get('/logout', function(req, res){
-  var token = req.cookies.token;
+  var token = req.cookies[user.username];
   axios.put('http://localhost:22230/users/' + user.username + '/logout', { tkn: token })
   .then(() => {
+    logged = false
     res.clearCookie('token');
     res.redirect('/');
   })
