@@ -21,6 +21,3 @@ Depois da fase de tratamento dos dados, manifestou-se a necessidade de armazenam
 
 ## Software
 De modo a simplificar e modular a estrutura dos vários componentes de software *Express* desenvolvidos, utilizou-se o *Express Generator*, um *package* que fornece uma estrutura bem definida de trabalho, com várias opções de personalização, para criação dos mesmos: API, Auth (Autenticação) e Interface. Todos esses componentes encontram-se 100% funcionais no *localhost*, nas portas 22231, 22230 e 22232, respetivamente. Para ser possível a realização do projeto, teve que se instalar todas as independências, individualmente, em cada um dos pacotes de software, através do comando *npm i*. Para execução, as aplicações conseguem ser postas em funcionamento através do comando *npm start*.
-
-## API
-De forma a ser possível aceder aos dados carregados no *MongoDB*, codificou-se uma API. 
