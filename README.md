@@ -52,6 +52,30 @@ No módulo relativo à autenticação e verificação de utilizadores foi criado
 * **DELETE /:usr/eliminarConta** - encarregue de tratar de toda a lógica associada à elminação da conta do utilizador passado como parâmetro
 
 ### Interface
+Relativamente ao módulo que sustenta a interface da aplicação web, procurou-se estabelecer um design simples mas que salientasse todas as funcionalidades desnvolidas, assim como fornecer um ambiente de procura e manipulação de registos com certo grau de comodidade para o utilizador. Logo no página principal, é possível pesquisar diretamente por um acordão, fornecendo o seu 'Processo', ou então direcionar a pesquisa apenas para um qualquer tribunal à escolha, havendo a hipótese de restringir a pesquisa através da 'Data do Acordão' ou dos 'Descritores'. Seguem-se enunciadas as rotas definidas neste módulo:
+* **GET /** - rota relativa à página principal
+* **GET /tribunal** - rota relativa à página de processos de um determinado tribunal
+* **GET /processo'** - rota relativa à página de um dado processo
+* **GET /perfil** - rota relativa à página de perfil do utilizador com sessão ativa
+* **GET /:usr/perfil** - rota relativa à página de perfil do utilizador passado como parâmetro
+* **GET /:usr/favoritos** - rota relativa à página de registos favoritos do utilizador passado como parâmetro
+* **GET /:usr/adicionados** - rota relativa à página de registos adicionados pelo utilizador passado como parâmetro
+* **GET /:usr/editados** - rota relativa à página de registos editados pelo utilizador passado como parâmetro
+* **GET /editarPerfil** - rota relativa à página de edição de perfil do utilizador como sessão ativa
+* **GET /adicionar** - rota relativa à página de criação de um registo por parte do utilizador como sessáo ativa
+* **GET /processo/elimina/:Processo** - rota relativa à eliminação de um registo por parte do utilizador com sessão ativa
+* **GET /login** - rota relativa à página de login
+* **GET /registo** - rota relativa à página de registo de conta
+* **GET /logout** - rota relativa à página de logout
+* **POST /editarPerfil** - rota relativa ao pedido de alteração de perfil por parte do utilizador com sessão ativa
+* **POST /editarFoto** - rota relativa ao pedido de alteração de foto de perfil por parte do utilizador com sessão ativa
+* **POST /processo/editar** - rota relativa ao pedido de edição de registo por parte do utilizador com sessão ativa
+* **POST /processo/eliminar** - rota relativa ao pedido de eliminação de registo por parte do utilizador com sessão ativa
+* **POST /adicionar** - rota relativa ao pedido de criação de registo por parte do utilizador com sessão ativa
+* **POST /processo/fav/:Processo** - rota relativa ao pedido de adição do registo passado como parâmetro aos favoritos do utilizador com sessão ativa
+* **POST /eliminarConta** - rota relativa ao pedido de eliminação da conta do utilizador com sessão ativa
+* **POST /login** - rota relativa ao pedido de login por parte de um utilizador
+* **POST /registo** - rota relativa ao pedido de registo de conta por parte de um utilizador
 
 
 ## Conclusão
