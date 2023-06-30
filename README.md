@@ -33,7 +33,23 @@ De forma a ser possível aceder aos dados carregados no *MongoDB*, codificou-se 
 Deste modo, a possibilidade de adição de novas funções ao ambiente torna-se muito mais fácil, uma vez que a modularidade do código simplifica imenso o processo. A comunicação simples entre os vários constituintes da API facilitam imenso a escrita de código e transformam a aplicação num elemento mais compacto, seguro e eficaz.
 
 ### Autenticação (Auth)
-
+No módulo relativo à autenticação e verificação de utilizadores foi criado um modelo de um utilizador que iria albergar diversas informações como: nome, email, username, localidade, idade, profissão, tipo de utilizador (administrador ou consumidor), datas de registo de conta e de último acesso, e informações relativas à manipulação dos registos de acordãos. Seguem-se enunciadas as rotas definidas neste módulo:
+* **GET /:usr/perfil** - encarregue de fornecer as informações do utilizador com o username passado como parâmetro
+* **GET /:usr/favoritos** - encarregue de fornecer os registos favoritos do utilizador com o username passado como parâmetro
+* **GET /:usr/adicionados** - encarregue de fornecer os registos adicionados por parte do utilizador com o username passado como parâmetro
+* **GET /:usr/editados** - encarregue de fornecer os registos editados pelo utilizador com o username passado como parâmetro
+* **POST /registo** - encarregue de tratar de toda a lógica associada ao registo de um novo utilizador
+* **POST /:usr/editarRegisto** - encarregue de tratar de toda a lógica associada à edição de um registo por parte do utilizador passado como parâmetro
+* **POST /:usr/adicionarRegisto** - encarregue de tratar de toda a lógica associada à criação de um registo por parte do utilizador passado como parâmetro
+* **POST /:usr/fav** - encarregue de tratar de toda a lógica associada à ação de adicionar um registo aos favoritos por parte do utilizador passado como parâmetro
+* **POST /:usr/elimina** - encarregue de tratar de toda a lógica associada à eliminação de um registo por parte do utilizador passado como parâmetro
+* **POST /:usr/editarFoto** - encarregue de tratar de toda a lógica associada à alteração da foto de perfil do utilizador passado como parâmetro
+* **POST /:usr/editarFoto** - encarregue de tratar de toda a lógica associada à alteração da foto de perfil do utilizador passado como parâmetro
+* **POST /:usr/login** - encarregue de tratar de toda a lógica associada ao login do utilizador passado como parâmetro
+* **PUT /:usr/logout** - encarregue de tratar de toda a lógica associada ao logout do utilizador passado como parâmetro
+* **PUT /:usr/logout** - encarregue de tratar de toda a lógica associada ao logout do utilizador passado como parâmetro
+* **PUT /:usr/editarPerfil** - encarregue de tratar de toda a lógica associada à edição de perfil por parte do utilizador passado como parâmetro
+* **DELETE /:usr/eliminarConta** - encarregue de tratar de toda a lógica associada à elminação da conta do utilizador passado como parâmetro
 
 ### Interface
 
