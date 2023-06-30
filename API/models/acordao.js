@@ -103,7 +103,11 @@ var tSchema = new mongoose.Schema({
     TextoParcial: String,
     Estrangeiro1: String,
     Reclamacoes: String,
-    DataDecRecorrida: String
+    DataDecRecorrida: String,
+    Added: String,
+    AdicionadoPor: String,
+    Edited: String,
+    EditadoPor: String
 },
 {
 versionKey: false

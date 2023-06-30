@@ -76,7 +76,7 @@ html
                         table 
                             each key in Object.keys(a)
                                 tr
-                                    if key != '_id' && key != 'Processo'
+                                    if key != '_id' && key != 'Processo' && key != 'Edited' && key != 'Added' && key != 'AdicionadoPor' && key != 'EditadoPor'
                                         if key in d
                                             td.key= d[key]
                                         else
@@ -87,6 +87,10 @@ html
                                                 a(href="http://www.dgsi.pt" + a[key] target='_blank')= a[key]
                                         else 
                                             td= a[key]
+            if a.Added != 'N'
+                p Adicionado por: #{a.AdicionadoPor} (#{a.Added})
+            if a.Edited != 'N'
+                p Editado por: #{a.EditadoPor}
 
             include footer.pug
 
@@ -106,6 +110,8 @@ html
                                     .input-container
                                         if key != 'Descritores'
                                             input(name=key type="text" value=a[key])
+                input(type="text" style="display:none;" name="EditadoPor" value=username)
+                input(type="text" style="display:none;" name="Edited" value="S")
 
                 img.popup-image(src='/images/close.png', alt='close', onclick=`toggleEd(); resetInputs()`)
                 button(type='submit') Guardar alterações

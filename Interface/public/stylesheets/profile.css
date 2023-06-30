@@ -34,13 +34,13 @@ li {
 .box {
     display: flex;
     position: relative;
-    width: 1100px;
-    height: 550px;
+    width: 1300px;
+    height: 700px;
     margin-bottom: 60px;
     background-color: #ccc;
     border: 2px solid blue;
     border-radius: 5px;
-    margin-top: 90px;
+    margin-top: 50px;
 }
 
 .left {
@@ -53,7 +53,13 @@ li {
     height: 200px;
     border-radius: 100px;
     margin-top: 30px;
+    cursor: pointer;
 }
+
+.prof img.pr:hover {
+    opacity: 0.8;
+}
+
 
 .prof h3 {
     font-size: 24px;
@@ -65,6 +71,7 @@ li {
     align-items: center;
     justify-content: center;
     margin-top: 15px;
+    font-size: 20px;
 }
 
 .loc img {
@@ -74,7 +81,7 @@ li {
 }
 
 .confs {
-  margin-top: 50px;
+  margin-top: 230px;
 }
 
 .opts {
@@ -114,6 +121,10 @@ button:hover {
     border-radius: 5px;
     transition: 0.3s ease;
     color: white;
+}
+
+button.el {
+    background: rgb(192, 0, 0);
 }
 
 button.el:hover {
@@ -246,6 +257,76 @@ h2.inf {
     top: 320px;
     display: flex;
     align-items: center;
+}
+
+.rfavs {
+    position: absolute;
+    left: 35px;
+    top: 400px;
+    display: flex;
+    align-items: center;
+}
+
+.prtable {
+    position: absolute;
+    left: 35px;
+    top: 430px;
+    display: flex;
+    align-items: center;
+}
+
+.prtable {
+    border-collapse: collapse;
+    border:2px solid black;
+}
+
+.prtable th {
+    background-color: rgba(7,13,89,255);
+    color: #fdfdfd;
+    border: 1px solid #060000;
+    padding: 8px;
+  }
+
+.prtable td, th {
+    border: 1px solid #060000;
+    padding: 8px;
+  }
+
+.prtable tr:nth-child(even){background-color: #fdfdfd;}
+
+.prtable a {
+    text-decoration: underline;
+    color: #000000;
+}
+
+.prof h3 {
+    color: rgba(7,13,89,255);
+}
+
+.radd {
+    position: absolute;
+    left: 55px;
+    top: 360px;
+    display: flex;
+    align-items: center;
+}
+
+.radd a{
+    text-decoration: underline;
+    color: #3619da;
+}
+
+.redt {
+    position: absolute;
+    left: 75px;
+    top: 360px;
+    display: flex;
+    align-items: center;
+}
+
+.redt a{
+    text-decoration: underline;
+    color: #3619da;
 }
 
 .info h4 {

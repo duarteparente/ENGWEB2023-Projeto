@@ -1,12 +1,14 @@
 var express = require('express');
 var router = express.Router();
 var axios = require('axios')
+var multer = require('multer')
+var fs = require('fs')
 var user, admin
 var logged = false
 var dict = {
   Processo: "Processo",
   url: "url",
-  tribunal: "tribunal",
+  tribunal: "Tribunal",
   Descritores: "Descritores",
   Relator: "Relator",
   Privacidade: "Privacidade",
@@ -126,10 +128,13 @@ var tribs = {
 }
 
 
+var upload = multer({dest: 'uploads'})
+
+
 router.get('/', function(req, res){
   if(logged){
     (user.level == 'admin') ? admin = true : admin = false
-    res.render('main-page', {log: true, adm: admin, username: user.username})
+    res.render('main-page', {log: true, adm: admin, username: user.username, image: user.image})
   }
   else{
     res.render('main-page', {log: false})
@@ -147,7 +152,7 @@ router.get('/tribunal', function(req, res, next) {
         var tribunal = tribs[req.query.tribunal]
         if(logged){
           (user.level == 'admin') ? admin = true : admin = false
-          res.render('tribunal-page', {log: true, adm: admin, username: user.username, lvl: user.level, ft: tribunal, acs: resposta.data })
+          res.render('tribunal-page', {log: true, adm: admin, username: user.username, lvl: user.level, ft: tribunal, acs: resposta.data ,image: user.image})
         }
         else{
           res.render('tribunal-page', {log: false, ft: tribunal, acs: resposta.data })
@@ -160,8 +165,9 @@ router.get('/tribunal', function(req, res, next) {
 });
 
 
-router.get('/processo/:id', function(req, res, next) {
-  axios.get('http://localhost:22231/acordaos?processo=' + req.params.id)
+router.get('/processo', function(req, res, next) {
+  var d = new Date().toUTCString().substring(0,19)
+  axios.get('http://localhost:22231/acordaos?processo=' + req.query.proc)
     .then(resposta => {
       if (resposta.data == null){
         res.render('not-found');
@@ -172,7 +178,7 @@ router.get('/processo/:id', function(req, res, next) {
           (user.level == 'admin') ? admin = true : admin = false
           axios.post("http://localhost:22230/users/" + user.username + "/perfil", {tkn: token})
             .then(response => {
-              res.render('acordao-page', {log: true, adm: admin, username: user.username, favs: response.data.dados.favs, lvl: user.level, d: dict, a: resposta.data })
+              res.render('acordao-page', {date: d, log: true, adm: admin, username: user.username, favs: response.data.dados.favs, lvl: user.level, d: dict, a: resposta.data, image: user.image})
             })
         }
         else{
@@ -190,10 +196,10 @@ router.get('/perfil', function(req, res, next) {
   if(logged){
     var token = req.cookies[user.username];
     (user.level == 'admin') ? admin = true : admin = false
-    axios.post("http://localhost:22230/users/" + user.username + "/perfil", {tkn: token})
+    axios.get("http://localhost:22230/users/perfil?" + 'usr=' + user.username + '&tkn=' + token)
       .then(response => {
         (user.level == 'admin') ? admin = true : admin = false
-        res.render('profile', {profile: response.data.dados, active: true, log: true,  adm: admin, username: user.username})
+        res.render('profile', {profile: response.data.dados, log: true,  adm: admin, image: response.data.dados.image, username: user.username})
       })
       .catch(e => {
         res.render('error', {err: error, message: 'ERROR'})
@@ -209,9 +215,9 @@ router.get('/favoritos', function(req, res, next) {
   if(logged){
     var token = req.cookies[user.username];
     (user.level == 'admin') ? admin = true : admin = false
-    axios.post("http://localhost:22230/users/" + user.username + "/perfil", {tkn: token})
+    axios.get("http://localhost:22230/users/" + user.username + '/favoritos?tkn=' + token)
       .then(response => {
-        res.render('favs', {log: true, adm: admin, username: user.username, favs: response.data.dados.favs})
+        res.render('favs', {log: true, adm: admin, username: user.username, favs: response.data.dados, image: user.image})
       })
       .catch(e => {
         res.render('error', {err: error, message: 'ERROR'})
@@ -223,12 +229,110 @@ router.get('/favoritos', function(req, res, next) {
 });
 
 
+router.get('/adicionados', function(req, res, next) {
+  if(logged){
+    var token = req.cookies[user.username];
+    (user.level == 'admin') ? admin = true : admin = false
+    axios.get("http://localhost:22230/users/" + user.username + '/adicionados?tkn=' + token)
+      .then(response => {
+        res.render('meusAcordaos', {edit: false, log: true, adm: admin, username: user.username, meus: response.data.dados, image: user.image})
+      })
+      .catch(e => {
+        res.render('error', {err: error, message: 'ERROR'})
+      })
+  }
+  else{
+    res.redirect('/login');
+  }
+});
+
+router.get('/editados', function(req, res, next) {
+  if(logged){
+    var token = req.cookies[user.username];
+    (user.level == 'admin') ? admin = true : admin = false
+    axios.get("http://localhost:22230/users/" + user.username + '/editados?tkn=' + token)
+      .then(response => {
+        res.render('meusAcordaos', {edit: true, log: true, adm: admin, username: user.username, meus: response.data.dados, image: user.image})
+      })
+      .catch(e => {
+        res.render('error', {err: error, message: 'ERROR'})
+      })
+  }
+  else{
+    res.redirect('/login');
+  }
+});
+
+
+router.post('/editarFoto', upload.single('profilePicture'), function(req, res, next) {
+  if(logged){
+    var token = req.cookies[user.username];
+    let oldPath = __dirname + '/../' + req.file.path
+    let newPath = __dirname + '/../public/profile/' + req.file.originalname
+  
+    fs.rename(oldPath, newPath, error => {
+      if(error) throw error
+    })
+
+    axios.post("http://localhost:22230/users/" + user.username + '/editarFoto', {tkn: token, photo: req.file.originalname})
+      .then(() => {
+        user.image = req.file.originalname
+        res.redirect('/perfil')
+      })
+      .catch(e => {
+        res.render('error', {err: error, message: 'ERROR'})
+      })
+  }
+  else{
+    res.redirect('/login');
+  }
+});
+
+
+router.get('/editarPerfil', function(req, res, next) {
+  if(logged){
+    var token = req.cookies[user.username];
+    (user.level == 'admin') ? admin = true : admin = false
+    axios.get("http://localhost:22230/users/perfil?" + 'usr=' + user.username + '&tkn=' + token)
+      .then(response => {
+        (user.level == 'admin') ? admin = true : admin = false
+        res.render('editProfile', {profile: response.data.dados, adm: admin, image: response.data.dados.image})
+      })
+      .catch(e => {
+        res.render('error', {err: error, message: 'ERROR'})
+      })
+  }
+  else{
+    res.redirect('/login');
+  }
+});
+
+
+router.post('/editarPerfil', function(req, res, next) {
+  if(logged){
+    var token = req.cookies[user.username];
+    (user.level == 'admin') ? admin = true : admin = false
+    axios.put("http://localhost:22230/users/" + user.username + '/editarPerfil', {tkn: token, dados: req.body})
+      .then(response => {
+        user = response.data.user
+        res.redirect('/perfil')
+      })
+      .catch(e => {
+        res.render('error', {err: error, message: 'ERROR'})
+      })
+  }
+  else{
+    res.redirect('/login');
+  }
+});
+
 
 router.get('/adicionar', function(req, res, next) {
+  var d = new Date().toUTCString().substring(0,19)
   if(logged){
     (user.level == 'admin') ? admin = true : admin = false
     if (admin == true){
-      res.render('addAc-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, msg: 'OK'})
+      res.render('addAc-page', {date: d, log: true, adm: admin, username: user.username, lvl: user.level, d: dict, msg: 'OK', image: user.image})
     }
     else {
       res.redirect('/');
@@ -260,9 +364,10 @@ router.get('/processo/removeFav/:Processo', function(req, res, next) {
 
 router.post('/processo/editar', function(req, res, next) {
       if(logged){
+        var token = req.cookies[user.username];
         (user.level == 'admin') ? admin = true : admin = false
         if (admin == true) {
-          axios.put('http://localhost:22231/acordaos/editar/' + req.query.id, req.body)
+          axios.put('http://localhost:22231/acordaos/editar/' + req.query.id + '?usr=' + user.username + '&tkn=' + token, req.body)
             .then(() => {
               res.redirect("/processo/" + req.query.Processo.replaceAll("/", "%2F"));
             })
@@ -312,18 +417,17 @@ router.post('/processo/eliminar', function(req, res, next) {
 
 router.post('/adicionar', function(req, res, next) {
       if(logged){
+        var token = req.cookies[user.username];
         (user.level == 'admin') ? admin = true : admin = false
         if (admin == true) {
           const filtered = Object.fromEntries(Object.entries(req.body).filter(([key, value]) => value !== ''));
           if ("Descritores" in filtered)
             filtered["Descritores"] = filtered["Descritores"].split(",")
-          
-          axios.post('http://localhost:22231/acordaos', filtered)
+          axios.post('http://localhost:22231/acordaos?usr=' + user.username + "&tkn=" + token, filtered)
             .then(resposta => {
               if (Object.keys(resposta.data).length == 0)
-                res.render('addAc-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, msg: 'NO'})
-              else
-                res.redirect('/processo/' + resposta.data.Processo)
+                res.render('addAc-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, msg: 'NO', image: user.image})
+              else res.redirect('/processo?proc=' + resposta.data.Processo.replaceAll("/", "%2F"))
             })
             .catch(error => {
               res.render('error', {err: error, message: 'ERROR'})
@@ -354,6 +458,26 @@ router.post('/processo/fav/:Processo', function(req, res, next) {
       else {
         res.redirect('/login');
       }
+});
+
+
+router.get('/eliminarConta', function(req, res, next) {
+  if(logged){
+    var token = req.cookies[user.username];
+    
+    axios.delete("http://localhost:22230/users/" + user.username + '/eliminarConta?tkn=' + token)
+    .then(() => {
+      logged = false
+      res.redirect('/')
+    })
+    .catch(e => {
+      res.render('error', {err: error, message: 'ERROR'})
+    })
+  }
+  
+  else{
+    res.redirect('/login');
+  }
 });
 
 

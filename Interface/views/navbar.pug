@@ -6,7 +6,7 @@ nav.navbar
             if log
                 .action 
                     .ple 
-                        img(src="/images/justice.jpeg" onclick="dropDownToggle();")
+                        img(src="/profile/"+image onclick="dropDownToggle();")
                     .dropdown
                         h3= username
                         ul 
@@ -14,6 +14,7 @@ nav.navbar
                             li.f: a(href="/favoritos") Favoritos
                             if adm == true 
                                 li.a: a(href="/adicionar") Novo acórdão
+                                li.m: a(href="/adicionados") Meus Acordãos
                             li.l: a(href="/logout") Logout
             else
                 li: a(href="/login") Login/Registar

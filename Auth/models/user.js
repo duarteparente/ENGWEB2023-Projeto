@@ -17,7 +17,10 @@ var userSchema = new mongoose.Schema({
     dateCreated: String,
     lastAccess: String,
     localidade: String,
-    favs: [favSchema]
+    image: String,
+    favs: [favSchema],
+    added: [String],
+    edited: [String]
   });
 
 userSchema.plugin(passportLocalMongoose);

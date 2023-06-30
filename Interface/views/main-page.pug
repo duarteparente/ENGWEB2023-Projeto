@@ -10,7 +10,7 @@ html
             function handleButtonClickP() {
                 var inputValue = document.getElementById('search-input').value.replaceAll("/", "%2F");
                 if (inputValue != '') {
-                    window.location.href = '/processo/' + inputValue;
+                    window.location.href = '/processo?proc=' + inputValue;
                     document.getElementById('search-input').value = "";
                 }
             }

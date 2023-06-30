@@ -49,6 +49,7 @@ module.exports.getUser = username => {
             })
 }
 
+
 module.exports.addUser = u => {
     return User.create(u)
             .then(resposta => {
@@ -60,8 +61,8 @@ module.exports.addUser = u => {
 }
 
 
-module.exports.updateUser = (id, info) => {
-    return User.updateOne({_id:id}, info)
+module.exports.updateUser = (usr, info) => {
+    return User.updateOne({username:usr}, info)
             .then(resposta => {
                 return resposta
             })
@@ -80,18 +81,8 @@ module.exports.updateUserStatus = (id, status) => {
             })
 }
 
-module.exports.updateUserPassword = (id, pwd) => {
-    return User.updateOne({_id:id}, pwd)
-            .then(resposta => {
-                return resposta
-            })
-            .catch(erro => {
-                return erro
-            })
-}
-
-module.exports.deleteUser = id => {
-    return User.deleteOne({_id:id})
+module.exports.deleteUser = usr => {
+    return User.deleteOne({username:usr})
             .then(resposta => {
                 return resposta
             })
@@ -113,6 +104,36 @@ module.exports.addFav = (username, fav) => {
 
 module.exports.retiraFav = (username, fav) => {
     return User.updateOne({ username: username }, { $pull: { favs: { Processo: fav.Processo } } })
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
+module.exports.updateFoto = (username, photo) => {
+    return User.updateOne({ username: username }, {image: photo})
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
+module.exports.addRegisto = (username, ID) => {
+    return User.updateOne({ username: username }, { $push: { added: ID } })
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
+module.exports.addEdit = (username, ID) => {
+    return User.updateOne({ username: username }, { $push: { edited: ID } })
         .then(resposta => {
             return resposta
         })

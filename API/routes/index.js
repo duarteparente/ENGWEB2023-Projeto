@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var axios = require('axios')
 var Acordao = require('../controllers/acordao')
 
 
@@ -26,17 +27,35 @@ router.get('/acordaos/tribunal', function(req, res) {
 
 
 router.put('/acordaos/editar/:id', function(req, res) {
-  Acordao.updateAcordao(req.params.id, req.body)
+  var username = req.query.usr
+  var token = req.query.tkn
+  axios.post('http://localhost:22230/users/' + username + '/editarRegisto', {proc: req.body.Processo, tkn: token})
+  .then(() => {
+    Acordao.updateAcordao(req.params.id, req.body)
     .then(dados => res.status(200).json(dados))
     .catch(erro => res.status(520).json({erro: erro, mensagem: "Não consegui atualizar o acórdão pretendido!"}))
+  })
+  .catch(error => {
+    res.render('error', {err: error, message: 'ERROR'})
+  })
 
 });
 
 
 router.post('/acordaos', function(req,res) {
-  Acordao.createAcordao(req.body)
+  var username = req.query.usr
+  var token = req.query.tkn
+  axios.post('http://localhost:22230/users/' + username + '/adicionarRegisto', {proc: req.body.Processo, tkn: token})
+  .then(() => {
+    console.log("estou aqui")
+    Acordao.createAcordao(req.body)
     .then(dados => res.status(200).json(dados))
     .catch(erro => res.status(520).json({erro: erro, mensagem: "Não consegui adicionar um novo acórdão!"}))
+    
+  })
+  .catch(error => {
+    res.render('error', {err: error, message: 'ERROR'})
+  })
 })
 
 
