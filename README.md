@@ -25,11 +25,11 @@ De modo a simplificar e modular a estrutura dos vários componentes de software 
 
 ### API
 De forma a ser possível aceder aos dados carregados no *MongoDB*, codificou-se uma API. Como referido, esta componente do projeto é importante na medida em que se assume responsável por estabelecer a comunicação entre a interação do cliente e os dados disponíveis. Principalmente, a API, para além das configurações básicas, é constituída por um modelo, elemento com a função de estabelecer contacto com a base de dados (recorrendo ao *Mongoose*, uma biblioteca responsável por conectar o MongoDB ao restante ambiente da API), por um controlador, responsável por efetuar *queries* na base de dados (recorrendo ao modelo definido) e por um roteador (*index*), responsável por tratar as várias rotas, comunicando, assim, com o controlador. Atualmente, a API suporta as seguintes rotas, com as suas devidas funcionalidades:
-* ##GET## /acordaos - dependendo dos constituintes da rota (req.query), a função definida para esta rota consegue devolver a contagem do número total de acórdãos ou um acórdão específico, pelo seu número de processo;
-* ##GET## /acordaos/tribunal - esta rota está associada a uma função capaz de retornar os processos pertencentes a um tribunal, podendo, também, filtrar os mesmos por data e descritor. Mais uma vez, o tipo de conteúdo envolvido depende dos elementos da rota (req.query);
-* ##PUT## /acordaos/editar/:id - através do id passado como parâmetro na rota (req.params.id), a função consegue editar o conteúdo de um registo da base de dados;
-* ##POST## /acordaos - a função associada a esta rota tem a capacidade de adicionar um novo registo à base de dados. O conteúdo do mesmo é encaminhado através do corpo (req.body);
-* ##DELETE## /acordaos/:id - deste modo, a função encarregue por esta rota tem a capacidade de eliminar um registo da base de dados, através do conteúdo presente, mais uma vez, nos parâmetros (req.params.id)
+* **GET** /acordaos - dependendo dos constituintes da rota (req.query), a função definida para esta rota consegue devolver a contagem do número total de acórdãos ou um acórdão específico, pelo seu número de processo;
+* **GET** /acordaos/tribunal - esta rota está associada a uma função capaz de retornar os processos pertencentes a um tribunal, podendo, também, filtrar os mesmos por data e descritor. Mais uma vez, o tipo de conteúdo envolvido depende dos elementos da rota (req.query);
+* **PUT** /acordaos/editar/:id - através do id passado como parâmetro na rota (req.params.id), a função consegue editar o conteúdo de um registo da base de dados;
+* **POST** /acordaos - a função associada a esta rota tem a capacidade de adicionar um novo registo à base de dados. O conteúdo do mesmo é encaminhado através do corpo (req.body);
+* **DELETE** /acordaos/:id - deste modo, a função encarregue por esta rota tem a capacidade de eliminar um registo da base de dados, através do conteúdo presente, mais uma vez, nos parâmetros (req.params.id)
 Deste modo, a possibilidade de adição de novas funções ao ambiente torna-se muito mais fácil, uma vez que a modularidade do código simplifica imenso o processo. A comunicação simples entre os vários constituintes da API facilitam imenso a escrita de código e transformam a aplicação num elemento mais compacto, seguro e eficaz.
 
 ### Autenticação (Auth)
