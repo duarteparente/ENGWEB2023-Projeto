@@ -7,13 +7,6 @@ var auth = require('../auth/auth')
 
 var User = require('../controllers/user')
 
-
-router.get('/', function(req, res){
-  User.list()
-    .then(dados => res.status(200).jsonp({dados: dados}))
-    .catch(e => res.status(500).jsonp({error: e}))
-})
-
 router.get('/:usr/perfil', auth.verificaAcesso, function(req, res){
   var user = req.params.usr
   User.getUser(user)
