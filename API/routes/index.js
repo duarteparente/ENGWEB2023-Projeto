@@ -29,7 +29,7 @@ router.get('/acordaos/tribunal', function(req, res) {
 router.put('/acordaos/editar/:id', function(req, res) {
   var username = req.query.usr
   var token = req.query.tkn
-  axios.post('http://localhost:22230/users/' + username + '/editarRegisto', {proc: req.body.Processo, tkn: token})
+  axios.post('http://localhost:22230/users/' + username + '/editarRegisto', {proc: req.query.proc, tkn: token})
   .then(() => {
     Acordao.updateAcordao(req.params.id, req.body)
     .then(dados => res.status(200).json(dados))
@@ -47,7 +47,6 @@ router.post('/acordaos', function(req,res) {
   var token = req.query.tkn
   axios.post('http://localhost:22230/users/' + username + '/adicionarRegisto', {proc: req.body.Processo, tkn: token})
   .then(() => {
-    console.log("estou aqui")
     Acordao.createAcordao(req.body)
     .then(dados => res.status(200).json(dados))
     .catch(erro => res.status(520).json({erro: erro, mensagem: "Não consegui adicionar um novo acórdão!"}))

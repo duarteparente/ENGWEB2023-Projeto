@@ -26,7 +26,7 @@ html
                             each ac in acs 
                                 tr 
                                     td 
-                                        a(href="/processo/" + ac.Processo.replace("/","%2F"))= ac.Processo
+                                        a(href="/processo?proc=" + ac.Processo)= ac.Processo
                                     td 
                                         a(href="http://www.dgsi.pt" + ac.url target='_blank')= ac.url
 

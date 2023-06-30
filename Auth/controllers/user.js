@@ -102,16 +102,32 @@ module.exports.addFav = (username, fav) => {
 }
 
 
-module.exports.retiraFav = (username, fav) => {
-    return User.updateOne({ username: username }, { $pull: { favs: { Processo: fav.Processo } } })
-        .then(resposta => {
-            return resposta
-        })
-        .catch(erro => {
-            return erro
-        })
-}
-
+module.exports.elimina = (username, fav) => {
+    return User.updateMany(
+      {
+        $or: [
+          { favs: { $elemMatch: { Processo: fav.Processo } } },
+          { added: fav.Processo },
+          { edited: fav.Processo }
+        ]
+      },
+      {
+        $pull: {
+          favs: { Processo: fav.Processo },
+          added: fav.Processo,
+          edited: fav.Processo
+        }
+      }
+    )
+      .then(resposta => {
+        return resposta;
+      })
+      .catch(erro => {
+        return erro;
+      });
+};
+  
+  
 module.exports.updateFoto = (username, photo) => {
     return User.updateOne({ username: username }, {image: photo})
         .then(resposta => {

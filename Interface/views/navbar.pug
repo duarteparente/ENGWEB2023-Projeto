@@ -11,10 +11,10 @@ nav.navbar
                         h3= username
                         ul 
                             li.p: a(href="/perfil") Perfil
-                            li.f: a(href="/favoritos") Favoritos
+                            li.f: a(href="/" + username + "/favoritos") Favoritos
                             if adm == true 
                                 li.a: a(href="/adicionar") Novo acórdão
-                                li.m: a(href="/adicionados") Meus Acordãos
+                                li.m: a(href="/" + username + "/adicionados") Meus Acordãos
                             li.l: a(href="/logout") Logout
             else
                 li: a(href="/login") Login/Registar

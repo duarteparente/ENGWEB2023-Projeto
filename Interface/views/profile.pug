@@ -44,21 +44,23 @@ html
                             .loc 
                                 img(src="/images/loc.png")
                                 h4 #{profile.localidade}
-                        .confs
-                            .opts
-                                img(src="/images/configs.png")
-                                h4 Opções de Configuração
-                            .btns 
-                                button.el 
-                                    a(href="#" onclick="mostrarPopupConfirmacao()") Eliminar Conta
+                        if mine
+                            .confs
+                                .opts
+                                    img(src="/images/configs.png")
+                                    h4 Opções de Configuração
+                                .btns 
+                                    button.el 
+                                        a(href="#" onclick="mostrarPopupConfirmacao()") Eliminar Conta
                                     
 
 
                     .right
                         .nameline 
                             h1 #{profile.name}
-                            button.ed 
-                                a(href="/editarPerfil"): i.fa.fa-pencil &nbsp Editar Perfil
+                            if mine
+                                button.ed 
+                                    a(href="/editarPerfil"): i.fa.fa-pencil &nbsp Editar Perfil
                         .info  
                             if profile.active
                                 .status
@@ -105,10 +107,10 @@ html
                                     th Adicionados
                                     th Editados
                                 tr
-                                    td: a(href="/favoritos") #{profile.favs.length}
+                                    td: a(href="/" + profile.username + "/favoritos") #{profile.favs.length}
                                     if adm
-                                        td: a(href="/adicionados") #{profile.added.length}
-                                        td: a(href="/editados") #{profile.edited.length}
+                                        td: a(href="/" + profile.username + "/adicionados") #{profile.added.length}
+                                        td: a(href="/" + profile.username + "/editados") #{profile.edited.length}
                                     else
                                         td ---
                                         td ---

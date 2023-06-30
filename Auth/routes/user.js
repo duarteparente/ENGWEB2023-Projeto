@@ -14,8 +14,8 @@ router.get('/', function(req, res){
     .catch(e => res.status(500).jsonp({error: e}))
 })
 
-router.get('/perfil', auth.verificaAcesso, function(req, res){
-  var user = req.query.usr
+router.get('/:usr/perfil', auth.verificaAcesso, function(req, res){
+  var user = req.params.usr
   User.getUser(user)
     .then(dados => res.status(200).jsonp({dados}))
     .catch(e => res.status(500).jsonp({error: e}))
@@ -43,7 +43,7 @@ router.get('/:usr/editados', auth.verificaAcesso, function(req, res){
 })
 
 router.post('/registo', function(req, res) {
-  var d = new Date().toUTCString().substring(0,14)
+  var d = new Date().toUTCString().substring(0,26)
   userModel.register(
     new userModel({
       username: req.body.username,
@@ -105,8 +105,8 @@ router.post('/:usr/fav', auth.verificaAcesso, function(req, res) {
     })
 })
 
-router.post('/:usr/retiraFav', auth.verificaAcesso, function(req, res) {
-  User.retiraFav(req.params.usr, req.body)
+router.post('/:usr/elimina', auth.verificaAcesso, function(req, res) {
+  User.elimina(req.params.usr, req.body)
     .then(dados => res.status(201).jsonp({dados: dados}))
     .catch(erro => {
       res.render('error', {error: erro, message: "Erro na alteração de favoritos do utilizador"})
@@ -124,7 +124,7 @@ router.post('/:usr/editarFoto', auth.verificaAcesso, function(req, res) {
 
 // POST /users/:usr/login  -  Efetua o login do utilizador
 router.post('/:usr/login', passport.authenticate('local'), function(req, res){
-  var d = new Date().toUTCString().substring(0,25)
+  var d = new Date().toUTCString().substring(0,26)
   jwt.sign(
     { username: req.params.usr, level: req.user.level, sub: 'login'}, 
     "BasesJuridicas",
@@ -166,7 +166,6 @@ router.put('/:usr/logout', auth.verificaAcesso, function(req, res) {
 })
 
 router.put('/:usr/editarPerfil', auth.verificaAcesso, function(req, res) {
-  console.log(req.body.dados)
   User.updateUser(req.params.usr, req.body.dados)
     .then(() => {
       User.getUser(req.params.usr)

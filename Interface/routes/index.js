@@ -8,7 +8,7 @@ var logged = false
 var dict = {
   Processo: "Processo",
   url: "url",
-  tribunal: "Tribunal",
+  tribunal: "tribunal",
   Descritores: "Descritores",
   Relator: "Relator",
   Privacidade: "Privacidade",
@@ -166,7 +166,7 @@ router.get('/tribunal', function(req, res, next) {
 
 
 router.get('/processo', function(req, res, next) {
-  var d = new Date().toUTCString().substring(0,19)
+  var d = new Date().toUTCString().substring(0,26)
   axios.get('http://localhost:22231/acordaos?processo=' + req.query.proc)
     .then(resposta => {
       if (resposta.data == null){
@@ -176,7 +176,7 @@ router.get('/processo', function(req, res, next) {
         if(logged){
           var token = req.cookies[user.username];
           (user.level == 'admin') ? admin = true : admin = false
-          axios.post("http://localhost:22230/users/" + user.username + "/perfil", {tkn: token})
+          axios.get("http://localhost:22230/users/" + user.username + "/perfil?tkn=" + token)
             .then(response => {
               res.render('acordao-page', {date: d, log: true, adm: admin, username: user.username, favs: response.data.dados.favs, lvl: user.level, d: dict, a: resposta.data, image: user.image})
             })
@@ -196,10 +196,10 @@ router.get('/perfil', function(req, res, next) {
   if(logged){
     var token = req.cookies[user.username];
     (user.level == 'admin') ? admin = true : admin = false
-    axios.get("http://localhost:22230/users/perfil?" + 'usr=' + user.username + '&tkn=' + token)
+    axios.get('http://localhost:22230/users/' + user.username + '/perfil?tkn=' + token)
       .then(response => {
         (user.level == 'admin') ? admin = true : admin = false
-        res.render('profile', {profile: response.data.dados, log: true,  adm: admin, image: response.data.dados.image, username: user.username})
+        res.render('profile', {profile: response.data.dados, log: true,  adm: admin, image: response.data.dados.image, username: user.username, mine: true})
       })
       .catch(e => {
         res.render('error', {err: error, message: 'ERROR'})
@@ -211,11 +211,36 @@ router.get('/perfil', function(req, res, next) {
 });
 
 
-router.get('/favoritos', function(req, res, next) {
+
+router.get('/:usr/perfil', function(req, res, next) {
+  if(logged){
+    if(req.params.usr == user.username){
+      res.redirect('/perfil')
+    }
+    else{
+      var token = req.cookies[user.username];
+      axios.get('http://localhost:22230/users/' + req.params.usr + '/perfil?tkn=' + token)
+        .then(response => {
+          (response.data.dados.level == 'admin') ? admin = true : admin = false
+          res.render('profile', {profile: response.data.dados, log: true,  adm: admin, image: user.image, username: user.username, mine: false})
+        })
+        .catch(e => {
+          res.render('error', {err: error, message: 'ERROR'} )
+        })
+
+      }
+  }
+  else{
+    res.redirect('/login');
+  }
+});
+
+
+router.get('/:usr/favoritos', function(req, res, next) {
   if(logged){
     var token = req.cookies[user.username];
     (user.level == 'admin') ? admin = true : admin = false
-    axios.get("http://localhost:22230/users/" + user.username + '/favoritos?tkn=' + token)
+    axios.get("http://localhost:22230/users/" + req.params.usr + '/favoritos?tkn=' + token)
       .then(response => {
         res.render('favs', {log: true, adm: admin, username: user.username, favs: response.data.dados, image: user.image})
       })
@@ -229,11 +254,11 @@ router.get('/favoritos', function(req, res, next) {
 });
 
 
-router.get('/adicionados', function(req, res, next) {
+router.get('/:usr/adicionados', function(req, res, next) {
   if(logged){
     var token = req.cookies[user.username];
     (user.level == 'admin') ? admin = true : admin = false
-    axios.get("http://localhost:22230/users/" + user.username + '/adicionados?tkn=' + token)
+    axios.get("http://localhost:22230/users/" + req.params.usr + '/adicionados?tkn=' + token)
       .then(response => {
         res.render('meusAcordaos', {edit: false, log: true, adm: admin, username: user.username, meus: response.data.dados, image: user.image})
       })
@@ -246,11 +271,12 @@ router.get('/adicionados', function(req, res, next) {
   }
 });
 
-router.get('/editados', function(req, res, next) {
+
+router.get('/:usr/editados', function(req, res, next) {
   if(logged){
     var token = req.cookies[user.username];
     (user.level == 'admin') ? admin = true : admin = false
-    axios.get("http://localhost:22230/users/" + user.username + '/editados?tkn=' + token)
+    axios.get("http://localhost:22230/users/" + req.params.usr + '/editados?tkn=' + token)
       .then(response => {
         res.render('meusAcordaos', {edit: true, log: true, adm: admin, username: user.username, meus: response.data.dados, image: user.image})
       })
@@ -293,7 +319,7 @@ router.get('/editarPerfil', function(req, res, next) {
   if(logged){
     var token = req.cookies[user.username];
     (user.level == 'admin') ? admin = true : admin = false
-    axios.get("http://localhost:22230/users/perfil?" + 'usr=' + user.username + '&tkn=' + token)
+    axios.get("http://localhost:22230/users/" + user.username + "/perfil?tkn=" + token)
       .then(response => {
         (user.level == 'admin') ? admin = true : admin = false
         res.render('editProfile', {profile: response.data.dados, adm: admin, image: response.data.dados.image})
@@ -328,7 +354,7 @@ router.post('/editarPerfil', function(req, res, next) {
 
 
 router.get('/adicionar', function(req, res, next) {
-  var d = new Date().toUTCString().substring(0,19)
+  var d = new Date().toUTCString().substring(0,26)
   if(logged){
     (user.level == 'admin') ? admin = true : admin = false
     if (admin == true){
@@ -344,12 +370,12 @@ router.get('/adicionar', function(req, res, next) {
 });
 
 
-router.get('/processo/removeFav/:Processo', function(req, res, next) {
+router.get('/processo/elimina/:Processo', function(req, res, next) {
       if(logged){
         var token = req.cookies[user.username];
-        axios.post('http://localhost:22230/users/' + user.username + '/retiraFav', {tkn: token, Processo: req.params.Processo, Descricao: ""})
+        axios.post('http://localhost:22230/users/' + user.username + '/elimina', {tkn: token, Processo: req.params.Processo, Descricao: ""})
         .then(() => {
-          res.redirect("/processo/" + req.params.Processo.replaceAll("/", "%2F"));
+          res.redirect('/processo?proc=' + req.params.Processo)
         })
         .catch(error => {
           res.render('error', {err: error, message: 'ERROR'})
@@ -367,9 +393,9 @@ router.post('/processo/editar', function(req, res, next) {
         var token = req.cookies[user.username];
         (user.level == 'admin') ? admin = true : admin = false
         if (admin == true) {
-          axios.put('http://localhost:22231/acordaos/editar/' + req.query.id + '?usr=' + user.username + '&tkn=' + token, req.body)
+          axios.put('http://localhost:22231/acordaos/editar/' + req.query.id + '?usr=' + user.username + '&tkn=' + token + '&proc=' + req.query.Processo, req.body)
             .then(() => {
-              res.redirect("/processo/" + req.query.Processo.replaceAll("/", "%2F"));
+              res.redirect('/processo?proc=' + req.query.Processo)
             })
             .catch(error => {
               res.render('error', {err: error, message: 'ERROR'})
@@ -390,7 +416,7 @@ router.post('/processo/eliminar', function(req, res, next) {
         var token = req.cookies[user.username];
         (user.level == 'admin') ? admin = true : admin = false
         if (admin == true) {
-          axios.post('http://localhost:22230/users/' + user.username + '/retiraFav', {tkn: token, Processo: req.query.Processo, Descricao: ""})
+          axios.post('http://localhost:22230/users/' + user.username + '/elimina', {tkn: token, Processo: req.query.Processo, Descricao: ""})
             .then(() => {
               axios.delete('http://localhost:22231/acordaos/' + req.query.id)
                 .then(() => {
@@ -427,7 +453,7 @@ router.post('/adicionar', function(req, res, next) {
             .then(resposta => {
               if (Object.keys(resposta.data).length == 0)
                 res.render('addAc-page', {log: true, adm: admin, username: user.username, lvl: user.level, d: dict, msg: 'NO', image: user.image})
-              else res.redirect('/processo?proc=' + resposta.data.Processo.replaceAll("/", "%2F"))
+              else res.redirect('/processo?proc=' + resposta.data.Processo)
             })
             .catch(error => {
               res.render('error', {err: error, message: 'ERROR'})
@@ -448,7 +474,7 @@ router.post('/processo/fav/:Processo', function(req, res, next) {
         var token = req.cookies[user.username];
         axios.post('http://localhost:22230/users/' + user.username + '/fav', {tkn: token, Processo: req.params.Processo, Descricao: req.body.Descricao})
         .then(() => {
-          res.redirect("/processo/" + req.params.Processo.replaceAll("/", "%2F"));
+          res.redirect("/processo?proc=" + req.params.Processo);
         })
         .catch(error => {
           res.render('error', {err: error, message: 'ERROR'})

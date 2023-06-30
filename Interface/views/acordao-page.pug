@@ -64,7 +64,7 @@ html
                         if log == true
                             - var favItem = favs.find(obj => obj.Processo === a.Processo)
                             if favItem 
-                                li: a(href="/processo/removeFav/" + a.Processo.replaceAll("/", "%2F"))
+                                li: a(href="/processo/elimina/" + a.Processo.replaceAll("/", "%2F"))
                                     img.fv(src="/images/heart-red.png")
 
                             else 
@@ -87,10 +87,16 @@ html
                                                 a(href="http://www.dgsi.pt" + a[key] target='_blank')= a[key]
                                         else 
                                             td= a[key]
-            if a.Added != 'N'
-                p Adicionado por: #{a.AdicionadoPor} (#{a.Added})
-            if a.Edited != 'N'
-                p Editado por: #{a.EditadoPor}
+
+            if "Added" in a
+                if a.Added != 'N' && a.Added != ''
+                    p.info Adicionado por: 
+                        a(href="/" + a.AdicionadoPor + "/perfil") #{a.AdicionadoPor} (#{a.Added})
+
+            if "Edited" in a
+                if a.Edited != 'N' && a.Edited != ''
+                    p.info Editado por: 
+                        a(href="/" + a.EditadoPor + "/perfil") #{a.EditadoPor}
 
             include footer.pug
 
@@ -100,16 +106,30 @@ html
                 table 
                     each key in Object.keys(a)
                         tr
-                            if key != '_id' && key != 'Processo' && key != 'Descritores'
-                                if key in d
-                                    td.key= d[key]
-                                else
-                                    if key == 'url'
-                                    td.key= key
+                            if key != '_id' && key != 'Processo' && key != 'Descritores' && key != 'Edited' && key != 'Added' && key != 'AdicionadoPor' && key != 'EditadoPor'
+                                td.key= d[key]
+                                
                                 td.inp
                                     .input-container
                                         if key != 'Descritores'
-                                            input(name=key type="text" value=a[key])
+                                            if key == 'tribunal'
+                                                select(name="tribunal")
+                                                    option(value="atco1") atco1
+                                                    option(value="jcon") jcon
+                                                    option(value="jdgpj") jdgpj
+                                                    option(value="jsta") jsta
+                                                    option(value="jstj") jstj
+                                                    option(value="jtca") jtca
+                                                    option(value="jtcampca") jtcampca
+                                                    option(value="jtcampct") jtcampct
+                                                    option(value="jtcn") jtcn
+                                                    option(value="jtrc") jtrc
+                                                    option(value="jtre") jtre
+                                                    option(value="jtrg") jtrg
+                                                    option(value="jtrl") jtrl
+                                                    option(value="jtrp") jtrp
+                                            else
+                                                input(name=key type="text" value=a[key])
                 input(type="text" style="display:none;" name="EditadoPor" value=username)
                 input(type="text" style="display:none;" name="Edited" value="S")
 

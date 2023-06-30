@@ -304,6 +304,16 @@ table a {
     border: none;
 }
 
+select {
+    margin-bottom: 50px;
+    border-radius: 5px;
+    padding-left: 10px;
+    width: 600px;
+    height: 50px;
+    background-color: rgba(7,13,89,255);
+    color: white;
+}
+
 .popup-image {
     position: absolute;
     top: 15px;
@@ -389,4 +399,12 @@ table a {
     width: 30px;
     height: 30px;
     cursor: pointer;
+}
+
+p.info {
+    margin-left: 15px;
+    color: rgba(7,13,89,255);
+    font-size: 18px;
+    font-weight: bold;
+    font-style: italic;
 }
